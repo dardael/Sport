@@ -8,4 +8,5 @@
 /var/
 /vendor/
 /infra/logs/
+/infra/mongodb/
 ###< symfony/framework-bundle ###
