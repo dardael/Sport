@@ -21,6 +21,18 @@ Encore
      * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
      */
     .addEntry('app', './assets/app.js')
+    .addEntry('authenticate', './assets/identification/authenticate.tsx')
+    .enableTypeScriptLoader(function(tsConfig) {
+        // You can use this callback function to adjust ts-loader settings
+        // https://github.com/TypeStrong/ts-loader/blob/master/README.md#loader-options
+        // For example:
+        // tsConfig.silent = false
+    })
+
+      // optionally enable forked type script for faster builds
+      // https://www.npmjs.com/package/fork-ts-checker-webpack-plugin
+      // requires that you have a tsconfig.json file that is setup correctly.
+        //.enableForkedTypeScriptTypesChecking()
 
     // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
     .enableStimulusBridge('./assets/controllers.json')
@@ -70,6 +82,7 @@ Encore
 
     // uncomment if you're having problems with a jQuery plugin
     //.autoProvidejQuery()
+    .enableReactPreset()
 ;
 
 module.exports = Encore.getWebpackConfig();

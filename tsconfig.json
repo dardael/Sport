@@ -1,0 +1,9 @@
+{
+    "include": ["assets/**/*.ts", "assets/**/*.tsx"],
+    "compilerOptions": {
+        "jsx": "react",
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true,
+        "target":"es6",
+    }
+}

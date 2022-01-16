@@ -13,6 +13,7 @@
 
         {% block javascripts %}
             {{ encore_entry_script_tags('app') }}
+            {{ encore_entry_script_tags('authenticate') }}
 
             <!-- Renders app.js & a webpack runtime.js file
                 <script src="/build/runtime.js" defer></script>
@@ -20,6 +21,8 @@
                 See note below about the "defer" attribute -->
         {% endblock %}
     </head>
-
+    <body>
+        <div id="root"></div>
+    </body>
     <!-- ... -->
 </html>
