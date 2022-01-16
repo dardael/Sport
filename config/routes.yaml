@@ -1,6 +1,3 @@
 #index:
 #    path: /
 #    controller: App\Controller\DefaultController::index
-identification:
-    path: /
-    controller: App\Controller\Security\Identification::display
