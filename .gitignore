@@ -9,4 +9,5 @@
 /vendor/
 /infra/logs/
 /infra/mongodb/
+/node_modules/
 ###< symfony/framework-bundle ###
