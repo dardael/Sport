@@ -21,7 +21,7 @@ Encore
      * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
      */
     .addEntry('app', './assets/app.js')
-    .addEntry('authenticate', './assets/identification/authenticate.tsx')
+    .addEntry('authenticatePage', './assets/identification/authenticatePage.tsx')
     .enableTypeScriptLoader(function(tsConfig) {
         // You can use this callback function to adjust ts-loader settings
         // https://github.com/TypeStrong/ts-loader/blob/master/README.md#loader-options
