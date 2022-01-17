@@ -15,6 +15,6 @@ class IdentificationController extends AbstractController
      */
     public function display(): Response
     {
-       return $this->render('base/base.html.twig');
+       return $this->render('base/base.html.twig', ['files' => ['authenticatePage']]);
     }
 }
