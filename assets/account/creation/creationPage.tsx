@@ -1,8 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import './styles.scss'
+import CreationBlock from "./components/creationBlock/index";
 
 ReactDOM.render(
-    <div className="account-creation-page"></div>,
+    <CreationBlock/>,
     document.getElementById('root')
 );  
