@@ -6,6 +6,7 @@ import Page from "../../../../components/base/page/index";
 const CreationBlock:React.FunctionComponent<{}> = ({}) => {
     return <>
         <Page
+            action = {'/account/save'}
             body={<>
                 <Input id={"identifiant"} label={"Identifiant"}></Input>
                 <Input id={"mail"} label={"Mail"}></Input>
@@ -13,7 +14,7 @@ const CreationBlock:React.FunctionComponent<{}> = ({}) => {
                 <Input id={"repeated-password"} label={"Répéter le mot de passe"} type={"password"}></Input>
             </>}
             footer={<>
-                <Button id={"create"} label={"Créer le compte"} icone={"fas fa-plus"}/>
+                <Button id={"create"} label={"Créer le compte"} icone={"fas fa-plus"} type={"submit"}/>
             </>}
         />
     </>

@@ -16,4 +16,12 @@ class AccountController extends AbstractController
     {
        return $this->render('base/base.html.twig', ['files'=> ['accountCreationPage']]);
     }
+
+    /**
+     * @Route("/account/save", name="account_save")
+     */
+    public function save(): Response
+    {
+        return $this->forward('App\Controller\Security\IdentificationController::display');
+    }
 }
