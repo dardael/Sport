@@ -28,4 +28,5 @@ RUN pickle install xdebug \
 #mongoDb
 RUN echo "--with-openssl-dir=yes" >> opts \
     && pickle install --with-configure-options=opts mongodb \
-    && echo "extension=mongo.so" > /usr/local/etc/php/conf.d/mongo.ini
+    && echo "extension=mongodb.so" > $PHP_INI_DIR/conf.d/mongodb.ini
+

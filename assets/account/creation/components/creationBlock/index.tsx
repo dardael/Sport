@@ -8,7 +8,7 @@ const CreationBlock:React.FunctionComponent<{}> = ({}) => {
         <Page
             action = {'/account/save'}
             body={<>
-                <Input id={"identifiant"} label={"Identifiant"}></Input>
+                <Input id={"pseudo"} label={"Identifiant"}></Input>
                 <Input id={"mail"} label={"Mail"}></Input>
                 <Input id={"password"} label={"Mot de passe"} type={"password"}></Input>
                 <Input id={"repeated-password"} label={"Répéter le mot de passe"} type={"password"}></Input>

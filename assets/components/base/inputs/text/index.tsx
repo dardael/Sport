@@ -11,7 +11,7 @@ const Input: React.FunctionComponent<{
   return <>
     <div className="input-container">
       <label>{label}</label>
-      <input type={type} id={id} onChange={(evt) => setValue(evt.target.value)} value={value}></input>
+      <input type={type} id={id} name={id} onChange={(evt) => setValue(evt.target.value)} value={value}></input>
     </div>
   </>
 }
