@@ -25,7 +25,7 @@ class AccountController extends AbstractController
     public function save(Request $request, Account $account): Response
     {  
         $account->create(
-            $request->query->get('mail'),
+            $request->query->get('email'),
             $request->query->get('pseudo'),
             $request->query->get('password')
         );
