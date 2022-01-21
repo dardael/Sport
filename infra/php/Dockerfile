@@ -26,7 +26,7 @@ RUN pickle install xdebug \
     && echo 'xdebug.debug.output_dir=/usr/local/logs/php' >> $PHP_INI_DIR/conf.d/docker-php-ext-xdebug.ini
 
 #mongoDb
-RUN echo "--with-openssl-dir=yes" >> opts \
-    && pickle install --with-configure-options=opts mongodb \
+RUN apk add libressl-dev \
+    && pickle install mongodb \
     && echo "extension=mongodb.so" > $PHP_INI_DIR/conf.d/mongodb.ini
 

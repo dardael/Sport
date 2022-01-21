@@ -8,8 +8,8 @@ class Account
 {
     public function create(string $mail, string $pseudo, string $password): void
     {
-        $client = new MongoDB\Client("mongodb://dardael:aty30ITE@localhost:27017");
-        $collection = $client->demo->beers;
-        $result = $collection->insertOne( [ 'name' => 'Hinterland', 'brewery' => 'BrewDog' ] );
+        $client = new MongoDB\Client("mongodb://dardael:aty30ITE@mongodb:27017");
+        $collection = $client->sport->accounts;
+        $result = $collection->insertOne( [ 'mail' => $mail, 'pseudo' => $pseudo, 'password' => $password, ] );
     }
 }

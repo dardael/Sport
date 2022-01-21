@@ -8,7 +8,6 @@
 /var/
 /vendor/
 /infra/logs/
-/infra/mongodb/
 /node_modules/
 ###< symfony/framework-bundle ###
 
@@ -18,3 +17,4 @@
 npm-debug.log
 yarn-error.log
 ###< symfony/webpack-encore-bundle ###
+infra/mongodb/database/
