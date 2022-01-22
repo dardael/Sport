@@ -6,10 +6,13 @@ use MongoDB;
 
 class Account
 {
+    private AccountDAO $accountDAO;
+    public function __construct(AccountDAO $accountDAO)  {
+        $this->accountDAO = $accountDAO;
+    }
+
     public function create(string $mail, string $pseudo, string $password): void
     {
-        $client = new MongoDB\Client("mongodb://dardael:aty30ITE@mongodb:27017");
-        $collection = $client->sport->accounts;
-        $result = $collection->insertOne( [ 'mail' => $mail, 'pseudo' => $pseudo, 'password' => $password, ] );
+        $this->accountDAO->create($mail, $pseudo, $password);
     }
 }
