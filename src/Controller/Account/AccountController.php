@@ -24,11 +24,18 @@ class AccountController extends AbstractController
      */
     public function save(Request $request, Account $account): Response
     {  
-        $account->create(
-            $request->query->get('email'),
-            $request->query->get('pseudo'),
-            $request->query->get('password')
-        );
-        return $this->forward('App\Controller\Security\IdentificationController::display');
+		try {
+			$account->create(
+            	$request->query->get('email'),
+            	$request->query->get('pseudo'),
+            	$request->query->get('password'),
+            	$request->query->get('repeted-password')
+        	);
+        	return $this->forward(
+				'App\Controller\Security\IdentificationController::display'
+			);
+		} catch (\Exception $exception) {
+			return $this->render('base/base.html.twig', ['files'=> ['accountCreationPage']]);
+		}
     }
 }
