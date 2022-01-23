@@ -35,7 +35,16 @@ class AccountController extends AbstractController
 				'App\Controller\Security\IdentificationController::display'
 			);
 		} catch (\Exception $exception) {
-			return $this->render('base/base.html.twig', ['files'=> ['accountCreationPage']]);
+			return $this->render(
+				'base/base.html.twig',
+				[
+					'files' => ['accountCreationPage'],
+					'variables' => [
+						'email' => $request->query->get('email'),
+            			'pseudo' => $request->query->get('pseudo'),
+					]
+				]
+			);
 		}
     }
 }

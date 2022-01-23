@@ -25,7 +25,16 @@
         {% endblock %}
     </head>
     <body>
-        <div id="root"></div>
+    	<script type="text/javascript">
+			window.spt = {
+			{% if variables is defined and not(variables is empty) %}
+				{% for name, value in variables %}
+					{{name}} : {{value|json_encode(constant('JSON_PRETTY_PRINT'))|raw }}, 
+				{% endfor %}
+			{% endif%}
+			};
+		</script>
+    	<div id="root"></div>
     </body>
     <!-- ... -->
 </html>
