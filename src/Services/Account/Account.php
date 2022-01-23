@@ -16,21 +16,41 @@ class Account
 		string $pseudo,
 		string $password,
 		string $repetedPassword
-	): void {
-		if (empty($mail)) {
-			throw new \UnexpectedValueException('Mail cannot be empty');
+    ): void {
+        $errors = $this->getFieldsErrors(
+            $mail,
+            $pseudo,
+            $password,
+            $repetedPassword
+        );
+        if (!empty($errors)) {
+            throw new \UnexpectedValueException(
+                array_shift($errors)
+            );
+        }
+		$this->accountDAO->create($mail, $pseudo, $password);
+    }
+
+    public function getFieldsErrors(
+        string $mail,
+		string $pseudo,
+		string $password,
+		string $repetedPassword
+    ): array {
+        $errors = [];
+        if (empty($mail)) {
+            $errors['email'] = 'Mail cannot be empty';
 		}
 		if (empty($pseudo)) {
-			throw new \UnexpectedValueException('Pseudo cannot be empty');
+            $errors['pseudo'] = 'Pseudo cannot be empty';
 		}
 		if (empty($password)) {
-			throw new \UnexpectedValueException('Password cannot be empty');
+            $errors['password'] = 'Password cannot be empty';
 		}
 		if ($repetedPassword !== $password) {
-			throw new \UnexpectedValueException(
-				'Password and repeted password cannot be different'
-			); 	
-		}
-		$this->accountDAO->create($mail, $pseudo, $password);
+            $errors['repeted-password']
+                = 'Password and repeted password cannot be different';
+        }
+        return $errors;
     }
 }
