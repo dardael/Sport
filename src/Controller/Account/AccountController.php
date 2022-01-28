@@ -47,4 +47,18 @@ class AccountController extends AbstractController
 			);
 		}
     }
+
+    /**
+     * @Route("/account/isValid", name="account_is_valid")
+     */
+    public function isValid(Request $request, Account $account): Response
+    {
+        $errors = $account->getFieldsErrors(
+            $request->get('email'),
+            $request->get('pseudo'),
+            $request->get('password'),
+            $request->get('repetedPassword')
+        );
+        return $this->json($errors);
+    }
 }
