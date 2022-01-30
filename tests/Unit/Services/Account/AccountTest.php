@@ -192,7 +192,7 @@ class AccountTest extends TestCase
     private function getAccountDAOMock(): AccountDAO
     {
         return $this->getMockBuilder(AccountDAO::class)
-        ->setMethods(['create'])
+        ->onlyMethods(['create'])
         ->getMock();
     }
 
