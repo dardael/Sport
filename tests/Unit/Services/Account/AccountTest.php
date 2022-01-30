@@ -106,7 +106,7 @@ class AccountTest extends TestCase
             'mdp2'
         );
         $this->assertEquals(
-            [ 'repeated-password' => 'Password and repeated password cannot be different'],
+            [ 'repeated-password' => CreationErrors::REPEATED_PASSWORD_DIFFERENT->value],
             (new AccountBO($accountDAO))->getFieldsErrors($account)
         );
     }
@@ -124,7 +124,7 @@ class AccountTest extends TestCase
             ''
         );
         $this->assertEquals(
-            ['password' => 'Password cannot be empty'],
+            ['password' => CreationErrors::PASSWORD_IS_EMPTY->value],
             (new AccountBO($accountDAO))->getFieldsErrors($account)
         );
     }
@@ -142,7 +142,7 @@ class AccountTest extends TestCase
             'mdp'
         );
         $this->assertEquals(
-            ['pseudo' => 'Pseudo cannot be empty'],
+            ['pseudo' => CreationErrors::PSEUDO_IS_EMPTY->value],
             (new AccountBO($accountDAO))->getFieldsErrors($account)
         );
     }
@@ -160,7 +160,7 @@ class AccountTest extends TestCase
             'mdp'
         );
         $this->assertEquals(
-            ['email' => 'Mail cannot be empty'],
+            ['email' => CreationErrors::EMAIL_IS_EMPTY->value],
             (new AccountBO($accountDAO))->getFieldsErrors($account)
         );
     }
@@ -179,11 +179,11 @@ class AccountTest extends TestCase
         );
         $this->assertEquals(
             [
-                'email' => 'Mail cannot be empty',
-                'pseudo' => 'Pseudo cannot be empty',
-                'password' => 'Password cannot be empty',
+                'email' => CreationErrors::EMAIL_IS_EMPTY->value,
+                'pseudo' => CreationErrors::PSEUDO_IS_EMPTY->value,
+                'password' => CreationErrors::PASSWORD_IS_EMPTY->value,
                 'repeated-password'
-                    => 'Password and repeated password cannot be different',
+                    => CreationErrors::REPEATED_PASSWORD_DIFFERENT->value,
             ],
             (new AccountBO($accountDAO))->getFieldsErrors($account)
         );
