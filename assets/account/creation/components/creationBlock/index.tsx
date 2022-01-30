@@ -5,7 +5,7 @@ import CenteredPage from "../../../../components/base/page/centeredPage/index";
 
 const CreationBlock:React.FunctionComponent<{
 	pseudo?: string,
-	email?: string
+	email?: string,
 }> = ({
 	pseudo,
 	email,
@@ -67,7 +67,12 @@ const CreationBlock:React.FunctionComponent<{
     const hasNoErrors = (): boolean => !errors.pseudo && !errors.password && !errors.email && !errors.repeatedPassword;
 
     return <>
-        <CenteredPage icon={<LockOutlined />} title="S'inscrire" errorMessage={hasNoErrors() ? null : 'Erreur lors de la création du compte'}>
+        <CenteredPage
+            icon={<LockOutlined />}
+            title="S'inscrire"
+            errorMessage={hasNoErrors() ? null : 'Erreur lors de la création du compte'}
+            successMessage={hasNoErrors() ? null : 'Erreur lors de la création du compte'}
+        >
             <Box
 				component="form" 
 				action='/account/save' 

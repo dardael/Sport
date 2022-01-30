@@ -2,7 +2,9 @@ import React from "react";
 import ReactDOM from "react-dom";
 import AuthenticateBlock from "./components/authenticateBlock/index";
 
-ReactDOM.render(
-    <AuthenticateBlock></AuthenticateBlock>,
-    document.getElementById('root')
-);  
+document.addEventListener("DOMContentLoaded", function() {
+    ReactDOM.render(
+        <AuthenticateBlock isFromCreation={spt.isFromCreation}/>,
+        document.getElementById('root')
+    );
+});

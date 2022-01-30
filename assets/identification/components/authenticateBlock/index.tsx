@@ -3,9 +3,9 @@ import { LockOutlined } from "../../../../node_modules/@mui/icons-material/index
 import { Avatar, Box, Button, Container, Grid, Link, TextField, Typography } from "../../../../node_modules/@mui/material/index";
 import CenteredPage from "../../../components/base/page/centeredPage/index";
 
-const AuthenticateBlock: React.FunctionComponent<{}> = () => {
+const AuthenticateBlock: React.FunctionComponent<{isFromCreation?: boolean}> = ({isFromCreation}) => {
     return <>
-       <CenteredPage icon={<LockOutlined />} title="Connexion">
+       <CenteredPage icon={<LockOutlined />} title="Connexion" successMessage={isFromCreation ? 'Création du compte validée' : null}>
             <Box component="form" onSubmit={()=>{}} noValidate sx={{ mt: 1 }}>
                 <TextField                 
                     margin="normal"

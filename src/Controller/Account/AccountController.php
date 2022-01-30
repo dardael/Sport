@@ -32,10 +32,9 @@ class AccountController extends AbstractController
             	$request->query->get('password'),
             	$request->query->get('repeatedPassword')
             ));
-        	return $this->forward(
-				'App\Controller\Security\IdentificationController::display'
-			);
-		} catch (\Exception $exception) {
+            return $this->redirectToRoute('identification', ['isFromCreation' => true]);
+
+        } catch (\Exception $exception) {
 			return $this->render(
 				'base/base.html.twig',
 				[
