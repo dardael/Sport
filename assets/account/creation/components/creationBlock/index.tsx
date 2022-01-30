@@ -10,19 +10,19 @@ const CreationBlock:React.FunctionComponent<{
 	pseudo,
 	email,
 }) => {
-    const [ account, setAccount] = useState({
+    const [account, setAccount] = useState({
         pseudo : pseudo || '',
         email : email || '',
         password: '',
         repeatedPassword: ''
     });
-    const [ errors, setErrors] = useState({
+    const [errors, setErrors] = useState({
         pseudo : null,
         email : null,
         password: null,
         repeatedPassword: null,
     });
-    const isAccountValid = async (evt: React.FormEvent<HTMLFormElement>) => {
+    const isAccountValid = async (evt) => {
         evt.preventDefault();
         let formData = new FormData();
         formData.append('pseudo', account.pseudo);
@@ -64,9 +64,11 @@ const CreationBlock:React.FunctionComponent<{
         setAccount({...account, repeatedPassword: evt.currentTarget.value});
     };
 
+    const hasNoErrors = (): boolean => !errors.pseudo && !errors.password && !errors.email && !errors.repeatedPassword;
+
     return <>
-        <CenteredPage icon={<LockOutlined />} title="S'inscrire">
-            <Box 
+        <CenteredPage icon={<LockOutlined />} title="S'inscrire" errorMessage={hasNoErrors() ? null : 'Erreur lors de la création du compte'}>
+            <Box
 				component="form" 
 				action='/account/save' 
                 onSubmit={isAccountValid}
