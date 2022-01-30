@@ -14,7 +14,8 @@ RUN set -ex \
 	&& chmod +x /usr/local/bin/pickle
 
 # XDebug extension
-RUN pickle install xdebug \
+RUN pecl install xdebug \
+    && docker-php-ext-enable xdebug \
     && echo 'xdebug.mode=develop,debug,profile,trace,coverage' >> $PHP_INI_DIR/conf.d/docker-php-ext-xdebug.ini \
     && echo 'xdebug.start_with_request=trigger' >> $PHP_INI_DIR/conf.d/docker-php-ext-xdebug.ini \
     && echo 'xdebug.profiler_output_name=callgrind.ou²t.%u%s.cgr' >> $PHP_INI_DIR/conf.d/docker-php-ext-xdebug.ini \
