@@ -2,7 +2,8 @@
 declare(strict_types = 1);
 namespace App\Controller\Account;
 
-use App\Services\Account\Account;
+use App\Services\Account\AccountBO;
+use App\Services\Account\AccountDTO;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -22,15 +23,15 @@ class AccountController extends AbstractController
     /**
      * @Route("/account/save", name="account_save")
      */
-    public function save(Request $request, Account $account): Response
+    public function save(Request $request, AccountBO $account): Response
     {  
 		try {
-			$account->create(
+			$account->create(new AccountDTO(
             	$request->query->get('email'),
             	$request->query->get('pseudo'),
             	$request->query->get('password'),
             	$request->query->get('repeted-password')
-        	);
+            ));
         	return $this->forward(
 				'App\Controller\Security\IdentificationController::display'
 			);
@@ -51,14 +52,14 @@ class AccountController extends AbstractController
     /**
      * @Route("/account/isValid", name="account_is_valid")
      */
-    public function isValid(Request $request, Account $account): Response
+    public function isValid(Request $request, AccountBO $account): Response
     {
-        $errors = $account->getFieldsErrors(
+        $errors = $account->getFieldsErrors(new AccountDTO(
             $request->get('email'),
             $request->get('pseudo'),
             $request->get('password'),
             $request->get('repetedPassword')
-        );
+        ));
         return $this->json($errors);
     }
 }

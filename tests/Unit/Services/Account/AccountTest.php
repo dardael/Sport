@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace App\Tests\Unit\Services\Account;
 
+use App\Services\Account\AccountDTO;
 use App\Services\Account\CreationErrors;
 use PHPUnit\Framework\TestCase;
-use App\Services\Account\Account;
+use App\Services\Account\AccountBO;
 use App\Services\Account\AccountDAO;
 
 class AccountTest extends TestCase
@@ -20,7 +21,8 @@ class AccountTest extends TestCase
         $accountDAO->expects($this->never())->method('create');
         $this->expectException(\UnexpectedValueException::class);
         $this->expectExceptionMessage(CreationErrors::PSEUDO_IS_EMPTY->value);
-        (new Account($accountDAO))->create('amail@coco.com', '', 'mdp', 'mdp');
+        $account = new AccountDTO('amail@coco.com', '', 'mdp', 'mdp');
+        (new AccountBO($accountDAO))->create($account);
     }
     
     /**
@@ -32,7 +34,8 @@ class AccountTest extends TestCase
         $accountDAO->expects($this->never())->method('create');
         $this->expectException(\UnexpectedValueException::class);
         $this->expectExceptionMessage(CreationErrors::EMAIL_IS_EMPTY->value);
-        (new Account($accountDAO))->create('', 'dardael', 'mdp', 'mdp');
+        $account = new AccountDTO('', 'dardael', 'mdp', 'mdp');
+        (new AccountBO($accountDAO))->create($account);
     }
     
     /**
@@ -44,8 +47,8 @@ class AccountTest extends TestCase
         $accountDAO->expects($this->never())->method('create');
         $this->expectException(\UnexpectedValueException::class);
         $this->expectExceptionMessage(CreationErrors::PASSWORD_IS_EMPTY->value);
-        (new Account($accountDAO))
-            ->create('itsamail@coco.fr', 'dardael', '', 'mdp');
+        $account = new AccountDTO('itsamail@coco.fr', 'dardael', '', 'mdp');
+        (new AccountBO($accountDAO))->create($account);
     } 
     
     /**
@@ -57,8 +60,8 @@ class AccountTest extends TestCase
         $accountDAO->expects($this->never())->method('create');
         $this->expectException(\UnexpectedValueException::class);
         $this->expectExceptionMessage(CreationErrors::REPEATED_PASSWORD_DIFFERENT->value);
-        (new Account($accountDAO))
-            ->create('itsamail@coco.fr', 'dardael', 'mdp', 'anotherMdp');
+        $account = new AccountDTO('itsamail@coco.fr', 'dardael', 'mdp', 'anotherMdp');
+        (new AccountBO($accountDAO))->create($account);
     }
 
     /**
@@ -68,8 +71,8 @@ class AccountTest extends TestCase
     {
         $accountDAO = $this->getAccountDAOMock();
         $accountDAO->expects($this->once())->method('create');
-        (new Account($accountDAO))
-            ->create('itsamail@coco.fr', 'dardael', 'mdp', 'mdp');
+        $account = new AccountDTO('itsamail@coco.fr', 'dardael', 'mdp', 'mdp');
+        (new AccountBO($accountDAO))->create($account);
     }
    
     /**
@@ -78,14 +81,15 @@ class AccountTest extends TestCase
     public function getFieldsErrors_returns_empty_when_there_is_no_error(): void
     {
         $accountDAO = $this->getAccountDAOMock();
+        $account = new AccountDTO(
+            'itsamail@coco.fr',
+            'dardael',
+            'mdp',
+            'mdp'
+        );
         $this->assertEquals(
             [],
-            (new Account($accountDAO))->getFieldsErrors(
-                'itsamail@coco.fr',
-                'dardael',
-                'mdp',
-                'mdp'
-            )
+            (new AccountBO($accountDAO))->getFieldsErrors($account)
         );
     }
 
@@ -95,17 +99,15 @@ class AccountTest extends TestCase
     public function getFieldsErrors_returns_repeted_password_in_error_when_different_than_password(): void
     {
         $accountDAO = $this->getAccountDAOMock();
+        $account = new AccountDTO(
+            'itsamail@coco.fr',
+            'dardael',
+            'mdp',
+            'mdp2'
+        );
         $this->assertEquals(
-            [
-                'repeted-password' 
-                    => 'Password and repeted password cannot be different'
-            ],
-            (new Account($accountDAO))->getFieldsErrors(
-                'itsamail@coco.fr',
-                'dardael',
-                'mdp',
-                'mdp2'
-            )
+            [ 'repeted-password' => 'Password and repeted password cannot be different'],
+            (new AccountBO($accountDAO))->getFieldsErrors($account)
         );
     }
 
@@ -115,14 +117,15 @@ class AccountTest extends TestCase
     public function getFieldsErrors_returns_password_in_error_when_empty(): void
     {
         $accountDAO = $this->getAccountDAOMock();
+        $account = new AccountDTO(
+            'itsamail@coco.fr',
+            'dardael',
+            '',
+            ''
+        );
         $this->assertEquals(
             ['password' => 'Password cannot be empty'],
-            (new Account($accountDAO))->getFieldsErrors(
-                'itsamail@coco.fr',
-                'dardael',
-                '',
-                ''
-            )
+            (new AccountBO($accountDAO))->getFieldsErrors($account)
         );
     }
 
@@ -132,14 +135,15 @@ class AccountTest extends TestCase
     public function getFieldsErrors_returns_pseudo_in_error_when_empty(): void
     {
         $accountDAO = $this->getAccountDAOMock();
+        $account = new AccountDTO(
+            'itsamail@coco.fr',
+            '',
+            'mdp',
+            'mdp'
+        );
         $this->assertEquals(
             ['pseudo' => 'Pseudo cannot be empty'],
-            (new Account($accountDAO))->getFieldsErrors(
-                'itsamail@coco.fr',
-                '',
-                'mdp',
-                'mdp'
-            )
+            (new AccountBO($accountDAO))->getFieldsErrors($account)
         );
     }
     
@@ -149,14 +153,15 @@ class AccountTest extends TestCase
     public function getFieldsErrors_returns_email_in_error_when_empty(): void
     {
         $accountDAO = $this->getAccountDAOMock();
+        $account = new AccountDTO(
+            '',
+            'dardael',
+            'mdp',
+            'mdp'
+        );
         $this->assertEquals(
             ['email' => 'Mail cannot be empty'],
-            (new Account($accountDAO))->getFieldsErrors(
-                '',
-                'dardael',
-                'mdp',
-                'mdp'
-            )
+            (new AccountBO($accountDAO))->getFieldsErrors($account)
         );
     }
     
@@ -166,20 +171,21 @@ class AccountTest extends TestCase
     public function getFieldsErrors_can_returns_all_errors_at_the_same_time(): void
     {
         $accountDAO = $this->getAccountDAOMock();
+        $account = new AccountDTO(
+            '',
+            '',
+            '',
+            'mdp'
+        );
         $this->assertEquals(
             [
                 'email' => 'Mail cannot be empty',
                 'pseudo' => 'Pseudo cannot be empty',
                 'password' => 'Password cannot be empty',
-                'repeted-password' 
-                    => 'Password and repeted password cannot be different',
+                'repeted-password'
+                => 'Password and repeted password cannot be different',
             ],
-            (new Account($accountDAO))->getFieldsErrors(
-                '',
-                '',
-                '',
-                'mdp'
-            )
+            (new AccountBO($accountDAO))->getFieldsErrors($account)
         );
     }
 
