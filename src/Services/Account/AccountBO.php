@@ -34,7 +34,19 @@ class AccountBO
             $errors['password'] = CreationErrors::PASSWORD_IS_EMPTY->value;
 		}
 		if ($account->getRepeatedPassword() !== $account->getPassword()) {
-            $errors['repeated-password'] = CreationErrors::REPEATED_PASSWORD_DIFFERENT->value;
+            $errors['repeatedPassword'] = CreationErrors::REPEATED_PASSWORD_DIFFERENT->value;
+        }
+        if(
+            empty($errors['email'])
+            && $this->accountDAO->isEmailAlreadyExisting($account->getEmail())
+        ){
+            $errors['email'] = CreationErrors::EMAIL_IS_EXISTING->value;
+        }
+        if(
+            empty($errors['pseudo'])
+            && $this->accountDAO->isPseudoAlreadyExisting($account->getPseudo())
+        ){
+            $errors['pseudo'] = CreationErrors::PSEUDO_IS_EXISTING->value;
         }
         return $errors;
     }

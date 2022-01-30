@@ -90,6 +90,8 @@ const CreationBlock:React.FunctionComponent<{
                     margin = "normal"
                     required
                     fullWidth
+                    error = {!!errors.pseudo}
+                    helperText = {errors.pseudo}
                     id = "pseudo"
                     label = "Pseudo"
                     name = "pseudo"
@@ -101,6 +103,8 @@ const CreationBlock:React.FunctionComponent<{
                     margin="normal"
                     required
                     fullWidth
+                    error = {!!errors.password}
+                    helperText = {errors.password}
                     name="password"
                     label="Mot de passe"
                     type="password"
@@ -113,11 +117,13 @@ const CreationBlock:React.FunctionComponent<{
                     margin="normal"
                     required
                     fullWidth
-                    name="repeated-password"
+                    error = {!!errors.repeatedPassword}
+                    helperText = {errors.repeatedPassword}
+                    name="repeatedPassword"
                     label="Répétez le Mot de passe"
                     type="password"
-                    id="repeated-password"
-                    autoComplete="repeated-password"
+                    id="repeatedPassword"
+                    autoComplete="repeatedPassword"
                     value = {account.repeatedPassword}
                     onChange = {onRepeatedPasswordChange}
                 />          

@@ -19,6 +19,8 @@ class AccountTest extends TestCase
     {
         $accountDAO = $this->getAccountDAOMock();
         $accountDAO->expects($this->never())->method('create');
+        $accountDAO->method('isEmailAlreadyExisting')->willReturn(false);
+        $accountDAO->method('isPseudoAlreadyExisting')->willReturn(false);
         $this->expectException(\UnexpectedValueException::class);
         $this->expectExceptionMessage(CreationErrors::PSEUDO_IS_EMPTY->value);
         $account = new AccountDTO('amail@coco.com', '', 'mdp', 'mdp');
@@ -32,6 +34,8 @@ class AccountTest extends TestCase
     {
         $accountDAO = $this->getAccountDAOMock();
         $accountDAO->expects($this->never())->method('create');
+        $accountDAO->method('isEmailAlreadyExisting')->willReturn(false);
+        $accountDAO->method('isPseudoAlreadyExisting')->willReturn(false);
         $this->expectException(\UnexpectedValueException::class);
         $this->expectExceptionMessage(CreationErrors::EMAIL_IS_EMPTY->value);
         $account = new AccountDTO('', 'dardael', 'mdp', 'mdp');
@@ -45,6 +49,8 @@ class AccountTest extends TestCase
     {
         $accountDAO = $this->getAccountDAOMock();
         $accountDAO->expects($this->never())->method('create');
+        $accountDAO->method('isEmailAlreadyExisting')->willReturn(false);
+        $accountDAO->method('isPseudoAlreadyExisting')->willReturn(false);
         $this->expectException(\UnexpectedValueException::class);
         $this->expectExceptionMessage(CreationErrors::PASSWORD_IS_EMPTY->value);
         $account = new AccountDTO('itsamail@coco.fr', 'dardael', '', 'mdp');
@@ -58,9 +64,41 @@ class AccountTest extends TestCase
     {
         $accountDAO = $this->getAccountDAOMock();
         $accountDAO->expects($this->never())->method('create');
+        $accountDAO->method('isEmailAlreadyExisting')->willReturn(false);
+        $accountDAO->method('isPseudoAlreadyExisting')->willReturn(false);
         $this->expectException(\UnexpectedValueException::class);
         $this->expectExceptionMessage(CreationErrors::REPEATED_PASSWORD_DIFFERENT->value);
         $account = new AccountDTO('itsamail@coco.fr', 'dardael', 'mdp', 'anotherMdp');
+        (new AccountBO($accountDAO))->create($account);
+    }
+
+    /**
+     * @test
+     **/
+    public function create_throws_an_exception_when_mail_already_exists():void
+    {
+        $accountDAO = $this->getAccountDAOMock();
+        $accountDAO->expects($this->never())->method('create');
+        $accountDAO->method('isEmailAlreadyExisting')->willReturn(true);
+        $accountDAO->method('isPseudoAlreadyExisting')->willReturn(false);
+        $this->expectException(\UnexpectedValueException::class);
+        $this->expectExceptionMessage(CreationErrors::EMAIL_IS_EXISTING->value);
+        $account = new AccountDTO('itsamail@coco.fr', 'dardael', 'mdp', 'mdp');
+        (new AccountBO($accountDAO))->create($account);
+    }
+
+    /**
+     * @test
+     **/
+    public function create_throws_an_exception_when_pseudo_already_exists():void
+    {
+        $accountDAO = $this->getAccountDAOMock();
+        $accountDAO->expects($this->never())->method('create');
+        $accountDAO->method('isEmailAlreadyExisting')->willReturn(false);
+        $accountDAO->method('isPseudoAlreadyExisting')->willReturn(true);
+        $this->expectException(\UnexpectedValueException::class);
+        $this->expectExceptionMessage(CreationErrors::PSEUDO_IS_EXISTING->value);
+        $account = new AccountDTO('itsamail@coco.fr', 'dardael', 'mdp', 'mdp');
         (new AccountBO($accountDAO))->create($account);
     }
 
@@ -71,6 +109,8 @@ class AccountTest extends TestCase
     {
         $accountDAO = $this->getAccountDAOMock();
         $accountDAO->expects($this->once())->method('create');
+        $accountDAO->method('isEmailAlreadyExisting')->willReturn(false);
+        $accountDAO->method('isPseudoAlreadyExisting')->willReturn(false);
         $account = new AccountDTO('itsamail@coco.fr', 'dardael', 'mdp', 'mdp');
         (new AccountBO($accountDAO))->create($account);
     }
@@ -81,6 +121,8 @@ class AccountTest extends TestCase
     public function getFieldsErrors_returns_empty_when_there_is_no_error(): void
     {
         $accountDAO = $this->getAccountDAOMock();
+        $accountDAO->method('isEmailAlreadyExisting')->willReturn(false);
+        $accountDAO->method('isPseudoAlreadyExisting')->willReturn(false);
         $account = new AccountDTO(
             'itsamail@coco.fr',
             'dardael',
@@ -99,6 +141,8 @@ class AccountTest extends TestCase
     public function getFieldsErrors_returns_repeated_password_in_error_when_different_than_password(): void
     {
         $accountDAO = $this->getAccountDAOMock();
+        $accountDAO->method('isEmailAlreadyExisting')->willReturn(false);
+        $accountDAO->method('isPseudoAlreadyExisting')->willReturn(false);
         $account = new AccountDTO(
             'itsamail@coco.fr',
             'dardael',
@@ -106,7 +150,7 @@ class AccountTest extends TestCase
             'mdp2'
         );
         $this->assertEquals(
-            [ 'repeated-password' => CreationErrors::REPEATED_PASSWORD_DIFFERENT->value],
+            [ 'repeatedPassword' => CreationErrors::REPEATED_PASSWORD_DIFFERENT->value],
             (new AccountBO($accountDAO))->getFieldsErrors($account)
         );
     }
@@ -117,6 +161,8 @@ class AccountTest extends TestCase
     public function getFieldsErrors_returns_password_in_error_when_empty(): void
     {
         $accountDAO = $this->getAccountDAOMock();
+        $accountDAO->method('isEmailAlreadyExisting')->willReturn(false);
+        $accountDAO->method('isPseudoAlreadyExisting')->willReturn(false);
         $account = new AccountDTO(
             'itsamail@coco.fr',
             'dardael',
@@ -135,6 +181,8 @@ class AccountTest extends TestCase
     public function getFieldsErrors_returns_pseudo_in_error_when_empty(): void
     {
         $accountDAO = $this->getAccountDAOMock();
+        $accountDAO->method('isEmailAlreadyExisting')->willReturn(false);
+        $accountDAO->method('isPseudoAlreadyExisting')->willReturn(false);
         $account = new AccountDTO(
             'itsamail@coco.fr',
             '',
@@ -153,6 +201,8 @@ class AccountTest extends TestCase
     public function getFieldsErrors_returns_email_in_error_when_empty(): void
     {
         $accountDAO = $this->getAccountDAOMock();
+        $accountDAO->method('isEmailAlreadyExisting')->willReturn(false);
+        $accountDAO->method('isPseudoAlreadyExisting')->willReturn(false);
         $account = new AccountDTO(
             '',
             'dardael',
@@ -164,6 +214,46 @@ class AccountTest extends TestCase
             (new AccountBO($accountDAO))->getFieldsErrors($account)
         );
     }
+
+    /**
+     * @test
+     **/
+    public function getFieldsErrors_returns_email_in_error_when_existing(): void
+    {
+        $accountDAO = $this->getAccountDAOMock();
+        $accountDAO->method('isEmailAlreadyExisting')->willReturn(true);
+        $accountDAO->method('isPseudoAlreadyExisting')->willReturn(false);
+        $account = new AccountDTO(
+            'coucou@gmail.com',
+            'dardael',
+            'mdp',
+            'mdp'
+        );
+        $this->assertEquals(
+            ['email' => CreationErrors::EMAIL_IS_EXISTING->value],
+            (new AccountBO($accountDAO))->getFieldsErrors($account)
+        );
+    }
+
+    /**
+     * @test
+     **/
+    public function getFieldsErrors_returns_pseudo_in_error_when_existing(): void
+    {
+        $accountDAO = $this->getAccountDAOMock();
+        $accountDAO->method('isEmailAlreadyExisting')->willReturn(false);
+        $accountDAO->method('isPseudoAlreadyExisting')->willReturn(true);
+        $account = new AccountDTO(
+            'coucou@gmail.com',
+            'dardael',
+            'mdp',
+            'mdp'
+        );
+        $this->assertEquals(
+            ['pseudo' => CreationErrors::PSEUDO_IS_EXISTING->value],
+            (new AccountBO($accountDAO))->getFieldsErrors($account)
+        );
+    }
     
     /**
      * @test
@@ -171,6 +261,8 @@ class AccountTest extends TestCase
     public function getFieldsErrors_can_returns_all_errors_at_the_same_time(): void
     {
         $accountDAO = $this->getAccountDAOMock();
+        $accountDAO->method('isEmailAlreadyExisting')->willReturn(false);
+        $accountDAO->method('isPseudoAlreadyExisting')->willReturn(false);
         $account = new AccountDTO(
             '',
             '',
@@ -182,7 +274,7 @@ class AccountTest extends TestCase
                 'email' => CreationErrors::EMAIL_IS_EMPTY->value,
                 'pseudo' => CreationErrors::PSEUDO_IS_EMPTY->value,
                 'password' => CreationErrors::PASSWORD_IS_EMPTY->value,
-                'repeated-password'
+                'repeatedPassword'
                     => CreationErrors::REPEATED_PASSWORD_DIFFERENT->value,
             ],
             (new AccountBO($accountDAO))->getFieldsErrors($account)
@@ -192,8 +284,7 @@ class AccountTest extends TestCase
     private function getAccountDAOMock(): AccountDAO
     {
         return $this->getMockBuilder(AccountDAO::class)
-        ->onlyMethods(['create'])
+        ->onlyMethods(['create', 'isEmailAlreadyExisting', 'isPseudoAlreadyExisting'])
         ->getMock();
     }
-
 }

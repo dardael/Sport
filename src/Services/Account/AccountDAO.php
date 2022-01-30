@@ -13,9 +13,20 @@ class AccountDAO extends DAO
     public function create(AccountDTO $account): void
     {
         $this->insert([
-            'mail' => $account->getEmail(),
+            'email' => $account->getEmail(),
             'pseudo' => $account->getPseudo(),
             'password' => $account->getPassword(),
         ]);
+    }
+
+    public function isEmailAlreadyExisting(string $email):bool
+    {
+        return $this->exists(['email' => $email]);
+    }
+
+    public function isPseudoAlreadyExisting(string $pseudo):bool
+    {
+        return $this->exists(['pseudo' => $pseudo]);
+
     }
 }
