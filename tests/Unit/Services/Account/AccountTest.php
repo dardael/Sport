@@ -54,7 +54,7 @@ class AccountTest extends TestCase
     /**
      * @test
      **/ 	
-    public function create_throws_an_exeption_when_password_and_and_repeted_password_are_different():void
+    public function create_throws_an_exeption_when_password_and_and_repeated_password_are_different():void
     {
         $accountDAO = $this->getAccountDAOMock();
         $accountDAO->expects($this->never())->method('create');
@@ -96,7 +96,7 @@ class AccountTest extends TestCase
     /**
      * @test
      **/ 	
-    public function getFieldsErrors_returns_repeted_password_in_error_when_different_than_password(): void
+    public function getFieldsErrors_returns_repeated_password_in_error_when_different_than_password(): void
     {
         $accountDAO = $this->getAccountDAOMock();
         $account = new AccountDTO(
@@ -106,7 +106,7 @@ class AccountTest extends TestCase
             'mdp2'
         );
         $this->assertEquals(
-            [ 'repeted-password' => 'Password and repeted password cannot be different'],
+            [ 'repeated-password' => 'Password and repeated password cannot be different'],
             (new AccountBO($accountDAO))->getFieldsErrors($account)
         );
     }
@@ -182,8 +182,8 @@ class AccountTest extends TestCase
                 'email' => 'Mail cannot be empty',
                 'pseudo' => 'Pseudo cannot be empty',
                 'password' => 'Password cannot be empty',
-                'repeted-password'
-                => 'Password and repeted password cannot be different',
+                'repeated-password'
+                => 'Password and repeated password cannot be different',
             ],
             (new AccountBO($accountDAO))->getFieldsErrors($account)
         );

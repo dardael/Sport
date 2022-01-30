@@ -34,7 +34,7 @@ class AccountBO
             $errors['password'] = CreationErrors::PASSWORD_IS_EMPTY->value;
 		}
 		if ($account->getRepeatedPassword() !== $account->getPassword()) {
-            $errors['repeted-password'] = CreationErrors::REPEATED_PASSWORD_DIFFERENT->value;
+            $errors['repeated-password'] = CreationErrors::REPEATED_PASSWORD_DIFFERENT->value;
         }
         return $errors;
     }

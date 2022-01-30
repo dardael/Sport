@@ -14,13 +14,13 @@ const CreationBlock:React.FunctionComponent<{
         pseudo : pseudo || '',
         email : email || '',
         password: '',
-        repetedPassword: ''
+        repeatedPassword: ''
     });
     const [ errors, setErrors] = useState({
         pseudo : null,
         email : null,
         password: null,
-        repetedPassword: null,
+        repeatedPassword: null,
     });
     const isAccountValid = async (evt: React.FormEvent<HTMLFormElement>) => {
         evt.preventDefault();
@@ -28,7 +28,7 @@ const CreationBlock:React.FunctionComponent<{
         formData.append('pseudo', account.pseudo);
         formData.append('email', account.email);
         formData.append('password',account.password );
-        formData.append('repetedPassword', account.repetedPassword);
+        formData.append('repeatedPassword', account.repeatedPassword);
         let response = await fetch(
             '/account/isValid',
             {
@@ -55,13 +55,13 @@ const CreationBlock:React.FunctionComponent<{
     };
 
     const onPasswordChange = (evt: React.ChangeEvent<HTMLInputElement>): void => {
-        setErrors({...errors, password: null, repetedPassword: null});
+        setErrors({...errors, password: null, repeatedPassword: null});
         setAccount({...account, password: evt.currentTarget.value});
     };
 
-    const onRepetedPasswordChange = (evt: React.ChangeEvent<HTMLInputElement>): void => {
-        setErrors({...errors, password: null, repetedPassword: null});
-        setAccount({...account, repetedPassword: evt.currentTarget.value});
+    const onRepeatedPasswordChange = (evt: React.ChangeEvent<HTMLInputElement>): void => {
+        setErrors({...errors, password: null, repeatedPassword: null});
+        setAccount({...account, repeatedPassword: evt.currentTarget.value});
     };
 
     return <>
@@ -113,13 +113,13 @@ const CreationBlock:React.FunctionComponent<{
                     margin="normal"
                     required
                     fullWidth
-                    name="repeted-password"
+                    name="repeated-password"
                     label="Répétez le Mot de passe"
                     type="password"
-                    id="repeted-password"
-                    autoComplete="repeted-password"
-                    value = {account.repetedPassword}
-                    onChange = {onRepetedPasswordChange}
+                    id="repeated-password"
+                    autoComplete="repeated-password"
+                    value = {account.repeatedPassword}
+                    onChange = {onRepeatedPasswordChange}
                 />          
                 <Button
                     type='submit'

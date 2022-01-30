@@ -30,7 +30,7 @@ class AccountController extends AbstractController
             	$request->query->get('email'),
             	$request->query->get('pseudo'),
             	$request->query->get('password'),
-            	$request->query->get('repeted-password')
+            	$request->query->get('repeated-password')
             ));
         	return $this->forward(
 				'App\Controller\Security\IdentificationController::display'
@@ -58,7 +58,7 @@ class AccountController extends AbstractController
             $request->get('email'),
             $request->get('pseudo'),
             $request->get('password'),
-            $request->get('repetedPassword')
+            $request->get('repeatedPassword')
         ));
         return $this->json($errors);
     }
