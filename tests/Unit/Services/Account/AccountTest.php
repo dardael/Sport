@@ -15,7 +15,7 @@ class AccountTest extends TestCase
     /**
      * @test
      **/ 	
-    public function create_throws_an_exeption_when_pseudo_is_empty():void
+    public function create_throws_an_exception_when_pseudo_is_empty():void
     {
         $accountDAO = $this->getAccountDAOMock();
         $accountDAO->expects($this->never())->method('create');
@@ -28,7 +28,7 @@ class AccountTest extends TestCase
     /**
      * @test
      **/ 	
-    public function create_throws_an_exeption_when_mail_is_empty():void
+    public function create_throws_an_exception_when_mail_is_empty():void
     {
         $accountDAO = $this->getAccountDAOMock();
         $accountDAO->expects($this->never())->method('create');
@@ -41,7 +41,7 @@ class AccountTest extends TestCase
     /**
      * @test
      **/ 	
-    public function create_throws_an_exeption_when_password_is_empty():void
+    public function create_throws_an_exception_when_password_is_empty():void
     {
         $accountDAO = $this->getAccountDAOMock();
         $accountDAO->expects($this->never())->method('create');
@@ -54,7 +54,7 @@ class AccountTest extends TestCase
     /**
      * @test
      **/ 	
-    public function create_throws_an_exeption_when_password_and_and_repeated_password_are_different():void
+    public function create_throws_an_exception_when_password_and_and_repeated_password_are_different():void
     {
         $accountDAO = $this->getAccountDAOMock();
         $accountDAO->expects($this->never())->method('create');
@@ -183,7 +183,7 @@ class AccountTest extends TestCase
                 'pseudo' => 'Pseudo cannot be empty',
                 'password' => 'Password cannot be empty',
                 'repeated-password'
-                => 'Password and repeated password cannot be different',
+                    => 'Password and repeated password cannot be different',
             ],
             (new AccountBO($accountDAO))->getFieldsErrors($account)
         );
