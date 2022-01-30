@@ -39,17 +39,16 @@ class Account
     ): array {
         $errors = [];
         if (empty($mail)) {
-            $errors['email'] = 'Mail cannot be empty';
+            $errors['email'] = CreationErrors::EMAIL_IS_EMPTY->value;
 		}
 		if (empty($pseudo)) {
-            $errors['pseudo'] = 'Pseudo cannot be empty';
+            $errors['pseudo'] = CreationErrors::PSEUDO_IS_EMPTY->value;
 		}
 		if (empty($password)) {
-            $errors['password'] = 'Password cannot be empty';
+            $errors['password'] = CreationErrors::PASSWORD_IS_EMPTY->value;
 		}
 		if ($repetedPassword !== $password) {
-            $errors['repeted-password']
-                = 'Password and repeted password cannot be different';
+            $errors['repeted-password'] = CreationErrors::REPEATED_PASSWORD_DIFFERENT->value;
         }
         return $errors;
     }

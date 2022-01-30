@@ -1,4 +1,4 @@
-FROM php:8.0.5-fpm-alpine
+FROM php:8.1.0-fpm-alpine
 RUN apk --update --no-cache add git
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 WORKDIR /var/www

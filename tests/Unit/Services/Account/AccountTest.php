@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Unit\Services\Account;
 
+use App\Services\Account\CreationErrors;
 use PHPUnit\Framework\TestCase;
 use App\Services\Account\Account;
 use App\Services\Account\AccountDAO;
@@ -18,7 +19,7 @@ class AccountTest extends TestCase
         $accountDAO = $this->getAccountDAOMock();
         $accountDAO->expects($this->never())->method('create');
         $this->expectException(\UnexpectedValueException::class);
-        $this->expectExceptionMessage('Pseudo cannot be empty');
+        $this->expectExceptionMessage(CreationErrors::PSEUDO_IS_EMPTY->value);
         (new Account($accountDAO))->create('amail@coco.com', '', 'mdp', 'mdp');
     }
     
@@ -30,7 +31,7 @@ class AccountTest extends TestCase
         $accountDAO = $this->getAccountDAOMock();
         $accountDAO->expects($this->never())->method('create');
         $this->expectException(\UnexpectedValueException::class);
-        $this->expectExceptionMessage('Mail cannot be empty');
+        $this->expectExceptionMessage(CreationErrors::EMAIL_IS_EMPTY->value);
         (new Account($accountDAO))->create('', 'dardael', 'mdp', 'mdp');
     }
     
@@ -42,7 +43,7 @@ class AccountTest extends TestCase
         $accountDAO = $this->getAccountDAOMock();
         $accountDAO->expects($this->never())->method('create');
         $this->expectException(\UnexpectedValueException::class);
-        $this->expectExceptionMessage('Password cannot be empty');
+        $this->expectExceptionMessage(CreationErrors::PASSWORD_IS_EMPTY->value);
         (new Account($accountDAO))
             ->create('itsamail@coco.fr', 'dardael', '', 'mdp');
     } 
@@ -55,9 +56,7 @@ class AccountTest extends TestCase
         $accountDAO = $this->getAccountDAOMock();
         $accountDAO->expects($this->never())->method('create');
         $this->expectException(\UnexpectedValueException::class);
-        $this->expectExceptionMessage(
-            'Password and repeted password cannot be different'
-        );
+        $this->expectExceptionMessage(CreationErrors::REPEATED_PASSWORD_DIFFERENT->value);
         (new Account($accountDAO))
             ->create('itsamail@coco.fr', 'dardael', 'mdp', 'anotherMdp');
     }
