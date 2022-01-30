@@ -3,9 +3,27 @@ import { LockOutlined } from "../../../../node_modules/@mui/icons-material/index
 import { Avatar, Box, Button, Container, Grid, Link, TextField, Typography } from "../../../../node_modules/@mui/material/index";
 import CenteredPage from "../../../components/base/page/centeredPage/index";
 
-const AuthenticateBlock: React.FunctionComponent<{isFromCreation?: boolean}> = ({isFromCreation}) => {
+const AuthenticateBlock: React.FunctionComponent<{
+    isFromCreation?: boolean
+    isFromInvalidCertification?: boolean
+    isFromValidCertification?: boolean
+}> = ({isFromCreation, isFromInvalidCertification, isFromValidCertification}) => {
+    const getSuccessMessage = () => {
+        if (isFromCreation) {
+            return 'Un mail vient de vous être envoyé pour confirmer la création de votre compte';
+        }
+        if (isFromValidCertification) {
+            return 'Votre compte est validé, vous pouvez maintenant vous connecter';
+        }
+        return '';
+    }
     return <>
-       <CenteredPage icon={<LockOutlined />} title="Connexion" successMessage={isFromCreation ? 'Création du compte validée' : null}>
+       <CenteredPage
+           icon={<LockOutlined />}
+           title="Connexion"
+           successMessage={getSuccessMessage()}
+           errorMessage={isFromInvalidCertification ? 'Erreur lors de la validation du compte' : ''}
+       >
             <Box component="form" onSubmit={()=>{}} noValidate sx={{ mt: 1 }}>
                 <TextField                 
                     margin="normal"

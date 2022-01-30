@@ -19,6 +19,24 @@ class AccountDAO extends DAO
         ]);
     }
 
+    public function addCertificationId(
+        AccountDTO $account,
+        string $certificationId
+    ): void {
+        $this->update(
+            ['email' => $account->getEmail()],
+            ['certificationId' => $certificationId]
+        );
+    }
+
+    public function certify(string $certificationId): void
+    {
+        $this->update(
+            ['certificationId' => $certificationId],
+            ['isCertified' => true]
+        );
+    }
+
     public function isEmailAlreadyExisting(string $email):bool
     {
         return $this->exists(['email' => $email]);
@@ -27,6 +45,10 @@ class AccountDAO extends DAO
     public function isPseudoAlreadyExisting(string $pseudo):bool
     {
         return $this->exists(['pseudo' => $pseudo]);
+    }
 
+    public function hasAccountWithCertificationId(string $certificationId): bool
+    {
+        return $this->exists(['certificationId' => $certificationId]);
     }
 }

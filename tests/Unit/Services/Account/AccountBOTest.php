@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace App\Tests\Unit\Services\Account;
 
 use App\Services\Account\AccountDTO;
+use App\Services\Account\CertificationBO;
 use App\Services\Account\CreationErrors;
+use App\Services\Core\Mail\Mailer;
 use PHPUnit\Framework\TestCase;
 use App\Services\Account\AccountBO;
 use App\Services\Account\AccountDAO;
 
-class AccountTest extends TestCase
+class AccountBOTest extends TestCase
 {
     /**
      * @test
@@ -21,10 +23,12 @@ class AccountTest extends TestCase
         $accountDAO->expects($this->never())->method('create');
         $accountDAO->method('isEmailAlreadyExisting')->willReturn(false);
         $accountDAO->method('isPseudoAlreadyExisting')->willReturn(false);
+        $certifier = $this->getCertificationBOMock();
+        $certifier->expects($this->never())->method('askForCertification');
         $this->expectException(\UnexpectedValueException::class);
         $this->expectExceptionMessage(CreationErrors::PSEUDO_IS_EMPTY->value);
         $account = new AccountDTO('amail@coco.com', '', 'mdp', 'mdp');
-        (new AccountBO($accountDAO))->create($account);
+        (new AccountBO($accountDAO, $certifier))->create($account);
     }
     
     /**
@@ -36,10 +40,12 @@ class AccountTest extends TestCase
         $accountDAO->expects($this->never())->method('create');
         $accountDAO->method('isEmailAlreadyExisting')->willReturn(false);
         $accountDAO->method('isPseudoAlreadyExisting')->willReturn(false);
+        $certifier = $this->getCertificationBOMock();
+        $certifier->expects($this->never())->method('askForCertification');
         $this->expectException(\UnexpectedValueException::class);
         $this->expectExceptionMessage(CreationErrors::EMAIL_IS_EMPTY->value);
         $account = new AccountDTO('', 'dardael', 'mdp', 'mdp');
-        (new AccountBO($accountDAO))->create($account);
+        (new AccountBO($accountDAO, $certifier))->create($account);
     }
     
     /**
@@ -51,10 +57,12 @@ class AccountTest extends TestCase
         $accountDAO->expects($this->never())->method('create');
         $accountDAO->method('isEmailAlreadyExisting')->willReturn(false);
         $accountDAO->method('isPseudoAlreadyExisting')->willReturn(false);
+        $certifier = $this->getCertificationBOMock();
+        $certifier->expects($this->never())->method('askForCertification');
         $this->expectException(\UnexpectedValueException::class);
         $this->expectExceptionMessage(CreationErrors::PASSWORD_IS_EMPTY->value);
         $account = new AccountDTO('itsamail@coco.fr', 'dardael', '', 'mdp');
-        (new AccountBO($accountDAO))->create($account);
+        (new AccountBO($accountDAO, $certifier))->create($account);
     } 
     
     /**
@@ -66,10 +74,12 @@ class AccountTest extends TestCase
         $accountDAO->expects($this->never())->method('create');
         $accountDAO->method('isEmailAlreadyExisting')->willReturn(false);
         $accountDAO->method('isPseudoAlreadyExisting')->willReturn(false);
+        $certifier = $this->getCertificationBOMock();
+        $certifier->expects($this->never())->method('askForCertification');
         $this->expectException(\UnexpectedValueException::class);
         $this->expectExceptionMessage(CreationErrors::REPEATED_PASSWORD_DIFFERENT->value);
         $account = new AccountDTO('itsamail@coco.fr', 'dardael', 'mdp', 'anotherMdp');
-        (new AccountBO($accountDAO))->create($account);
+        (new AccountBO($accountDAO, $certifier))->create($account);
     }
 
     /**
@@ -81,10 +91,12 @@ class AccountTest extends TestCase
         $accountDAO->expects($this->never())->method('create');
         $accountDAO->method('isEmailAlreadyExisting')->willReturn(true);
         $accountDAO->method('isPseudoAlreadyExisting')->willReturn(false);
+        $certifier = $this->getCertificationBOMock();
+        $certifier->expects($this->never())->method('askForCertification');
         $this->expectException(\UnexpectedValueException::class);
         $this->expectExceptionMessage(CreationErrors::EMAIL_IS_EXISTING->value);
         $account = new AccountDTO('itsamail@coco.fr', 'dardael', 'mdp', 'mdp');
-        (new AccountBO($accountDAO))->create($account);
+        (new AccountBO($accountDAO, $certifier))->create($account);
     }
 
     /**
@@ -96,10 +108,12 @@ class AccountTest extends TestCase
         $accountDAO->expects($this->never())->method('create');
         $accountDAO->method('isEmailAlreadyExisting')->willReturn(false);
         $accountDAO->method('isPseudoAlreadyExisting')->willReturn(true);
+        $certifier = $this->getCertificationBOMock();
+        $certifier->expects($this->never())->method('askForCertification');
         $this->expectException(\UnexpectedValueException::class);
         $this->expectExceptionMessage(CreationErrors::PSEUDO_IS_EXISTING->value);
         $account = new AccountDTO('itsamail@coco.fr', 'dardael', 'mdp', 'mdp');
-        (new AccountBO($accountDAO))->create($account);
+        (new AccountBO($accountDAO, $certifier))->create($account);
     }
 
     /**
@@ -109,10 +123,12 @@ class AccountTest extends TestCase
     {
         $accountDAO = $this->getAccountDAOMock();
         $accountDAO->expects($this->once())->method('create');
+        $certifier = $this->getCertificationBOMock();
+        $certifier->expects($this->once())->method('askForCertification');
         $accountDAO->method('isEmailAlreadyExisting')->willReturn(false);
         $accountDAO->method('isPseudoAlreadyExisting')->willReturn(false);
         $account = new AccountDTO('itsamail@coco.fr', 'dardael', 'mdp', 'mdp');
-        (new AccountBO($accountDAO))->create($account);
+        (new AccountBO($accountDAO, $certifier))->create($account);
     }
    
     /**
@@ -131,7 +147,8 @@ class AccountTest extends TestCase
         );
         $this->assertEquals(
             [],
-            (new AccountBO($accountDAO))->getFieldsErrors($account)
+            (new AccountBO($accountDAO, $this->getCertificationBOMock()))
+                ->getFieldsErrors($account)
         );
     }
 
@@ -151,7 +168,8 @@ class AccountTest extends TestCase
         );
         $this->assertEquals(
             [ 'repeatedPassword' => CreationErrors::REPEATED_PASSWORD_DIFFERENT->value],
-            (new AccountBO($accountDAO))->getFieldsErrors($account)
+            (new AccountBO($accountDAO, $this->getCertificationBOMock()))
+                ->getFieldsErrors($account)
         );
     }
 
@@ -171,7 +189,8 @@ class AccountTest extends TestCase
         );
         $this->assertEquals(
             ['password' => CreationErrors::PASSWORD_IS_EMPTY->value],
-            (new AccountBO($accountDAO))->getFieldsErrors($account)
+            (new AccountBO($accountDAO, $this->getCertificationBOMock()))
+                ->getFieldsErrors($account)
         );
     }
 
@@ -191,7 +210,8 @@ class AccountTest extends TestCase
         );
         $this->assertEquals(
             ['pseudo' => CreationErrors::PSEUDO_IS_EMPTY->value],
-            (new AccountBO($accountDAO))->getFieldsErrors($account)
+            (new AccountBO($accountDAO, $this->getCertificationBOMock()))
+                ->getFieldsErrors($account)
         );
     }
     
@@ -211,7 +231,8 @@ class AccountTest extends TestCase
         );
         $this->assertEquals(
             ['email' => CreationErrors::EMAIL_IS_EMPTY->value],
-            (new AccountBO($accountDAO))->getFieldsErrors($account)
+            (new AccountBO($accountDAO, $this->getCertificationBOMock()))
+                ->getFieldsErrors($account)
         );
     }
 
@@ -231,7 +252,8 @@ class AccountTest extends TestCase
         );
         $this->assertEquals(
             ['email' => CreationErrors::EMAIL_IS_EXISTING->value],
-            (new AccountBO($accountDAO))->getFieldsErrors($account)
+            (new AccountBO($accountDAO, $this->getCertificationBOMock()))
+                ->getFieldsErrors($account)
         );
     }
 
@@ -251,7 +273,8 @@ class AccountTest extends TestCase
         );
         $this->assertEquals(
             ['pseudo' => CreationErrors::PSEUDO_IS_EXISTING->value],
-            (new AccountBO($accountDAO))->getFieldsErrors($account)
+            (new AccountBO($accountDAO, $this->getCertificationBOMock()))
+                ->getFieldsErrors($account)
         );
     }
     
@@ -277,7 +300,8 @@ class AccountTest extends TestCase
                 'repeatedPassword'
                     => CreationErrors::REPEATED_PASSWORD_DIFFERENT->value,
             ],
-            (new AccountBO($accountDAO))->getFieldsErrors($account)
+            (new AccountBO($accountDAO, $this->getCertificationBOMock()))
+                ->getFieldsErrors($account)
         );
     }
 
@@ -286,5 +310,13 @@ class AccountTest extends TestCase
         return $this->getMockBuilder(AccountDAO::class)
         ->onlyMethods(['create', 'isEmailAlreadyExisting', 'isPseudoAlreadyExisting'])
         ->getMock();
+    }
+
+    private function getCertificationBOMock(): CertificationBO
+    {
+        return $this->getMockBuilder(CertificationBO::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['askForCertification'])
+            ->getMock();
     }
 }

@@ -19,7 +19,13 @@ class IdentificationController extends AbstractController
             'base/base.html.twig',
             [
                 'files' => ['authenticatePage'],
-                'variables' => ['isFromCreation' => $request->query->has('isFromCreation')]
+                'variables' => [
+                    'isFromCreation' => $request->query->has('isFromCreation'),
+                    'isFromInvalidCertification'
+                        => $request->query->has('isFromInvalidCertification'),
+                    'isFromValidCertification'
+                        => $request->query->has('isFromValidCertification'),
+                ]
             ]
         );
     }

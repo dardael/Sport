@@ -71,7 +71,6 @@ const CreationBlock:React.FunctionComponent<{
             icon={<LockOutlined />}
             title="S'inscrire"
             errorMessage={hasNoErrors() ? null : 'Erreur lors de la création du compte'}
-            successMessage={hasNoErrors() ? null : 'Erreur lors de la création du compte'}
         >
             <Box
 				component="form" 

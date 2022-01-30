@@ -4,6 +4,7 @@ namespace App\Controller\Account;
 
 use App\Services\Account\AccountBO;
 use App\Services\Account\AccountDTO;
+use App\Services\Account\CertificationBO;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -60,5 +61,26 @@ class AccountController extends AbstractController
             $request->get('repeatedPassword')
         ));
         return $this->json($errors);
+    }
+
+    /**
+     * @Route("/account/certify/{certificationId}", name="account_certify")
+     */
+    public function certify(
+        string $certificationId,
+        CertificationBO $certificationBO
+    ): Response {
+        try {
+            $certificationBO->certify($certificationId);
+        } catch (\Exception $exception) {
+            return $this->redirectToRoute(
+                'identification',
+                ['isFromInvalidCertification' => true]
+            );
+        }
+        return $this->redirectToRoute(
+            'identification',
+            ['isFromValidCertification' => true]
+        );
     }
 }

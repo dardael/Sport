@@ -13,6 +13,11 @@ abstract class DAO
         $this->getCollection()->insertOne($data);
     }
 
+    protected function update(array $filter, array $data): void
+    {
+        $this->getCollection()->updateMany($filter, ['$set' => $data]);
+    }
+
     protected function exists(array $filter): bool
     {
         $collection = $this->getCollection();
