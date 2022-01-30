@@ -40,7 +40,7 @@ const CreationBlock:React.FunctionComponent<{
         if ( wrongFields.length !== 0 ) {
             setErrors({...errors, ...wrongFields});
         } else {
-            evt.currentTarget.submit();
+            evt.target.submit();
         }
     };
 
