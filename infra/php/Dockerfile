@@ -5,16 +5,9 @@ WORKDIR /var/www
 CMD composer install ;  php-fpm
 EXPOSE 9000
 
-#pickle
-RUN set -ex \
-    && apk --no-cache add pcre-dev ${PHPIZE_DEPS} \ 
-	&& apk add --update libzip-dev \
-	&& docker-php-ext-install -j$(nproc) zip \
-	&& curl -L -o /usr/local/bin/pickle https://github.com/FriendsOfPHP/pickle/releases/download/v0.7.0/pickle.phar \
-	&& chmod +x /usr/local/bin/pickle
-
 # XDebug extension
-RUN pecl install xdebug \
+RUN apk --no-cache add pcre-dev ${PHPIZE_DEPS} \
+    && pecl install xdebug \
     && docker-php-ext-enable xdebug \
     && echo 'xdebug.mode=develop,debug,profile,trace,coverage' >> $PHP_INI_DIR/conf.d/docker-php-ext-xdebug.ini \
     && echo 'xdebug.start_with_request=trigger' >> $PHP_INI_DIR/conf.d/docker-php-ext-xdebug.ini \
@@ -28,6 +21,7 @@ RUN pecl install xdebug \
 
 #mongoDb
 RUN apk add libressl-dev \
-    && pickle install mongodb \
+    && pecl install mongodb \
+    && docker-php-ext-enable mongodb \
     && echo "extension=mongodb.so" > $PHP_INI_DIR/conf.d/mongodb.ini
 
