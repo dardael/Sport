@@ -63,7 +63,7 @@ class AccountBO
 
     public function isExisting(string $email): bool
     {
-        return $this->accountDAO->isEmailAlreadyExisting($email);
+        return $this->accountDAO->isEmailAlreadyExisting($email, true);
     }
 
     public function sendPassword(string $email): void
@@ -74,5 +74,10 @@ class AccountBO
             'Mots de passe de votre compte Dardael Sport oublié',
             'Voici votre mots de passe : ' . $account->getPassword()
         );
+    }
+
+    public function isConnectionValid(string $email, string $password): bool
+    {
+        return $this->accountDAO->isConnectionValid($email, $password);
     }
 }

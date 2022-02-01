@@ -37,9 +37,15 @@ class AccountDAO extends DAO
         );
     }
 
-    public function isEmailAlreadyExisting(string $email):bool
-    {
-        return $this->exists(['email' => $email]);
+    public function isEmailAlreadyExisting(
+        string $email,
+        bool $mustBeCertified = false
+    ): bool {
+        $filters = ['email' => $email];
+        if ($mustBeCertified) {
+            $filters['isCertified'] = true;
+        }
+        return $this->exists($filters);
     }
 
     public function isPseudoAlreadyExisting(string $pseudo):bool
@@ -54,11 +60,20 @@ class AccountDAO extends DAO
 
     public function getFromEmail(string $email): AccountDTO
     {
-        $account = $this->getCollection()->findOne(['email' => $email]);
+        $account = $this->getCollection()
+            ->findOne(['email' => $email, 'isCertified' => true]);
         return new AccountDTO(
             $account['email'],
             $account['pseudo'],
             $account['password']
         );
+    }
+
+    public function isConnectionValid(string $email, string $password): bool
+    {
+        return $this->exists(
+            ['email' => $email, 'password' => $password, 'isCertified' => true]
+        );
+
     }
 }

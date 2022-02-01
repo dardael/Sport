@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import { LockOutlined } from "../../../../node_modules/@mui/icons-material/index";
 import { Avatar, Box, Button, Container, Grid, Link, TextField, Typography } from "../../../../node_modules/@mui/material/index";
 import CenteredPage from "../../../components/base/page/centeredPage/index";
@@ -8,7 +8,19 @@ const AuthenticateBlock: React.FunctionComponent<{
     isFromInvalidCertification?: boolean
     isFromValidCertification?: boolean
     isFromForgottenEmail?: boolean
-}> = ({isFromCreation, isFromInvalidCertification, isFromValidCertification, isFromForgottenEmail}) => {
+    isFromInvalidConnection?: boolean
+}> = ({
+    isFromCreation,
+    isFromInvalidCertification,
+    isFromValidCertification,
+    isFromForgottenEmail,
+    isFromInvalidConnection
+}) => {
+    const [account, setAccount] = useState({
+        email : '',
+        password: '',
+    });
+    const [error, setError] = useState(false);
     const getSuccessMessage = () => {
         if (isFromCreation) {
             return 'Un mail vient de vous être envoyé pour confirmer la création de votre compte';
@@ -21,14 +33,58 @@ const AuthenticateBlock: React.FunctionComponent<{
         }
         return '';
     }
+
+    const getErrorMessage = () => {
+        if (error || isFromInvalidConnection) {
+            return 'Adresse mail ou mots de passe incorrecte';
+        }
+        if (isFromInvalidCertification) {
+            return 'Erreur lors de la validation du compte';
+        }
+        return '';
+    }
+
+    const onEmailChange = (evt: React.ChangeEvent<HTMLInputElement>): void => {
+        setAccount({...account, email: evt.currentTarget.value});
+    };
+
+    const onPasswordChange = (evt: React.ChangeEvent<HTMLInputElement>): void => {
+        setAccount({...account, password: evt.currentTarget.value});
+    };
+
+    const isConnectionValid = async (evt) => {
+        evt.preventDefault();
+        let formData = new FormData();
+        formData.append('email', account.email);
+        formData.append('password',account.password );
+        let response = await fetch(
+            '/isConnectionValid',
+            {
+                method: 'POST',
+                body: formData,
+            }
+        );
+        let isConnectionValid = await response.json();
+        if (!isConnectionValid) {
+            setError(true);
+        } else {
+            evt.target.submit();
+        }
+    };
+
     return <>
        <CenteredPage
            icon={<LockOutlined />}
            title="Connexion"
            successMessage={getSuccessMessage()}
-           errorMessage={isFromInvalidCertification ? 'Erreur lors de la validation du compte' : ''}
+           errorMessage={getErrorMessage()}
        >
-            <Box component="form" onSubmit={()=>{}} noValidate sx={{ mt: 1 }}>
+            <Box
+                component="form"
+                onSubmit={isConnectionValid}
+                action='/connect'
+                noValidate sx={{ mt: 1 }}
+            >
                 <TextField                 
                     margin="normal"
                     required
@@ -38,6 +94,8 @@ const AuthenticateBlock: React.FunctionComponent<{
                     name="email"
                     autoComplete="email"
                     autoFocus
+                    value = {account.email}
+                    onChange = {onEmailChange}
                 />
                 <TextField
                     margin="normal"
@@ -48,6 +106,8 @@ const AuthenticateBlock: React.FunctionComponent<{
                     type="password"
                     id="password"
                     autoComplete="current-password"
+                    value = {account.password}
+                    onChange = {onPasswordChange}
                 />
                 <Button
                     type="submit"
