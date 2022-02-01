@@ -7,13 +7,17 @@ const AuthenticateBlock: React.FunctionComponent<{
     isFromCreation?: boolean
     isFromInvalidCertification?: boolean
     isFromValidCertification?: boolean
-}> = ({isFromCreation, isFromInvalidCertification, isFromValidCertification}) => {
+    isFromForgottenEmail?: boolean
+}> = ({isFromCreation, isFromInvalidCertification, isFromValidCertification, isFromForgottenEmail}) => {
     const getSuccessMessage = () => {
         if (isFromCreation) {
             return 'Un mail vient de vous être envoyé pour confirmer la création de votre compte';
         }
         if (isFromValidCertification) {
             return 'Votre compte est validé, vous pouvez maintenant vous connecter';
+        }
+        if (isFromForgottenEmail) {
+            return 'Un email vient de vous être envoyé pour la récupération de votre mots de passe';
         }
         return '';
     }
@@ -55,8 +59,8 @@ const AuthenticateBlock: React.FunctionComponent<{
                 </Button>
                 <Grid container>
                     <Grid item xs>
-                        <Link href="#" variant="body2">
-                            Mot de passe oublié ?
+                        <Link href="account/forgotten" variant="body2">
+                            {"Mot de passe oublié ?"}
                         </Link>
                     </Grid>
                     <Grid item>

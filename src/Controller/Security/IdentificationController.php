@@ -25,6 +25,8 @@ class IdentificationController extends AbstractController
                         => $request->query->has('isFromInvalidCertification'),
                     'isFromValidCertification'
                         => $request->query->has('isFromValidCertification'),
+                    'isFromForgottenEmail'
+                        => $request->query->has('isFromForgottenEmail'),
                 ]
             ]
         );

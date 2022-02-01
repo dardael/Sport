@@ -14,7 +14,7 @@ class AccountDTO
         string  $email,
         string  $pseudo,
         string  $password,
-        ?string $repeatedPassword
+        ?string $repeatedPassword = null
     ){
         $this->email = $email;
         $this->pseudo = $pseudo;

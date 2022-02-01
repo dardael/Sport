@@ -9,11 +9,13 @@ class AccountBO
 {
     private AccountDAO $accountDAO;
     private CertificationBO $certifier;
+    private Mailer $mailer;
 
-    public function __construct(AccountDAO $accountDAO, CertificationBO $certifier)
+    public function __construct(AccountDAO $accountDAO, CertificationBO $certifier, Mailer $mailer)
     {
         $this->accountDAO = $accountDAO;
         $this->certifier = $certifier;
+        $this->mailer = $mailer;
     }
 
     public function create(AccountDTO $account): void
@@ -57,5 +59,20 @@ class AccountBO
             $errors['pseudo'] = CreationErrors::PSEUDO_IS_EXISTING->value;
         }
         return $errors;
+    }
+
+    public function isExisting(string $email): bool
+    {
+        return $this->accountDAO->isEmailAlreadyExisting($email);
+    }
+
+    public function sendPassword(string $email): void
+    {
+        $account = $this->accountDAO->getFromEmail($email);
+        $this->mailer->send(
+            $account->getEmail(),
+            'Mots de passe de votre compte Dardael Sport oublié',
+            'Voici votre mots de passe : ' . $account->getPassword()
+        );
     }
 }

@@ -16,7 +16,7 @@ class AccountController extends AbstractController
     /**
      * @Route("/account/create", name="account_creation")
      */
-    public function display(): Response
+    public function displayCreationScreen(): Response
     {
        return $this->render('base/base.html.twig', ['files'=> ['accountCreationPage']]);
     }
@@ -83,4 +83,45 @@ class AccountController extends AbstractController
             ['isFromValidCertification' => true]
         );
     }
+
+    /**
+     * @Route("/account/forgotten", name="account_forgotten")
+     */
+    public function displayForgottenPasswordScreen(Request $request): Response {
+        return $this->render(
+            'base/base.html.twig',
+            [
+                'files' => ['forgottenPasswordPage'],
+                'variables' => ['hasError' => $request->query->has('hasError')],
+            ]
+        );
+    }
+
+    /**
+     * @Route("/account/isExisting", name="account_is_existing")
+     */
+    public function isExisting(Request $request, AccountBO $account): Response
+    {
+        $isExisting = $account->isExisting($request->get('email'));
+        return $this->json($isExisting);
+    }
+
+    /**
+     * @Route("/account/sendPassword", name="account_send_password")
+     */
+    public function sendPassword(Request $request, AccountBO $accountBO): Response {
+        try {
+            $accountBO->sendPassword($request->get('email'));
+        } catch (\Exception $exception) {
+            return $this->redirectToRoute(
+                'account_forgotten',
+                ['hasError' => true]
+            );
+        }
+        return $this->redirectToRoute(
+            'identification',
+            ['isFromForgottenEmail' => true]
+        );
+    }
+
 }

@@ -1,9 +1,10 @@
 {
-    "include": ["assets/**/*.ts", "assets/**/*.tsx"],
+    "include": ["assets/**/*.ts", "assets/**/*.tsx", "src/**/*"],
     "compilerOptions": {
         "jsx": "react",
         "allowSyntheticDefaultImports": true,
         "esModuleInterop": true,
         "target":"es6",
-    }
+        "moduleResolution": "node",
+    },
 }

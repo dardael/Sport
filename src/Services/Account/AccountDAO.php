@@ -51,4 +51,14 @@ class AccountDAO extends DAO
     {
         return $this->exists(['certificationId' => $certificationId]);
     }
+
+    public function getFromEmail(string $email): AccountDTO
+    {
+        $account = $this->getCollection()->findOne(['email' => $email]);
+        return new AccountDTO(
+            $account['email'],
+            $account['pseudo'],
+            $account['password']
+        );
+    }
 }
