@@ -24,6 +24,7 @@ Encore
     .addEntry('authenticatePage', './assets/identification/authenticatePage.tsx')
     .addEntry('accountCreationPage', './assets/account/creation/creationPage.tsx')
     .addEntry('forgottenPasswordPage', './assets/account/forgottenPassword/forgottenPasswordPage.tsx')
+    .addEntry('homePage', './assets/home/homePage.tsx')
     .enableTypeScriptLoader(function(tsConfig) {
         // You can use this callback function to adjust ts-loader settings
         // https://github.com/TypeStrong/ts-loader/blob/master/README.md#loader-options

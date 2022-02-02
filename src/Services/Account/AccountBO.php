@@ -80,4 +80,9 @@ class AccountBO
     {
         return $this->accountDAO->isConnectionValid($email, $password);
     }
+
+    public function getAccount(string $email): AccountDTO
+    {
+        return $this->accountDAO->getFromEmail($email);
+    }
 }

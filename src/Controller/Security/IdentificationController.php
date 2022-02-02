@@ -4,13 +4,22 @@ declare(strict_types = 1);
 namespace App\Controller\Security;
 
 use App\Services\Account\AccountBO;
+use App\Services\Core\User\UserBO;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 class IdentificationController extends AbstractController
 {
+    private SessionInterface $session;
+
+    public function __construct(RequestStack $requestStack)
+    {
+        $this->session = $requestStack->getSession();
+    }
     /**
      * @Route("/", name="identification")
      */
@@ -50,19 +59,16 @@ class IdentificationController extends AbstractController
     /**
      * @Route("/connect", name="connect")
      */
-    public function connect(Request $request, AccountBO $accountBO): Response
+    public function connect(Request $request, UserBO $userBO): Response
     {
-        $isConnectionValid = $accountBO->isConnectionValid(
-            $request->get('email'),
-            $request->get('password')
-        );
-        if ($isConnectionValid) {
-            //on va vers la home
-        } else {
+        try {
+            $userBO->connect($request->get('email'), $request->get('password'));
+        } catch (\Exception $exception) {
             return $this->redirectToRoute(
                 'identification',
                 ['isFromInvalidConnection' => true]
             );
         }
+        return $this->redirectToRoute('home_display');
     }
 }
