@@ -1,10 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import Menu from "./components/menu/menu";
+import SptMenu from "./components/sptMenu";
 
 document.addEventListener("DOMContentLoaded", function() {
     ReactDOM.render(
-        <Menu/>,
+        <SptMenu pseudo = {spt.pseudo}/>,
         document.getElementById('root')
     );
 });

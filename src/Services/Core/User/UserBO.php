@@ -43,4 +43,10 @@ class UserBO
             throw new \OAuthException('Access unauthorized');
         }
     }
+
+    public function getUserPseudo(): string
+    {
+        $user = $this->session->get('user');
+        return $user->getPseudo();
+    }
 }

@@ -16,13 +16,14 @@ class HomeController extends AbstractController
     /**
      * @Route("/Home", name="home_display")
      */
-    public function display(Request $request, UserBO $userBO): Response
+    public function display(UserBO $userBO): Response
     {
         $userBO->authenticate();
         return $this->render(
             'base/base.html.twig',
             [
                 'files' => ['homePage'],
+                'variables' => ['pseudo' => $userBO->getUserPseudo()]
             ]
         );
     }
