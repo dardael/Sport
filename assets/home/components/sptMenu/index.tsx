@@ -12,7 +12,7 @@ import IconButton from '@mui/material/IconButton';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import HomeIcon from '@mui/icons-material/Home';
 import {ListItem, ListItemIcon, ListItemText} from '@mui/material';
-import {AccountCircle, ChevronRight} from "@mui/icons-material";
+import {AccountCircle, ChevronRight, Menu} from "@mui/icons-material";
 import SettingsIcon from '@mui/icons-material/Settings';
 import HomeLinks from "./HomeLinks";
 
@@ -66,7 +66,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
     }),
 );
 
-const SptMenu:React.FunctionComponent<{pseudo: string}> = ({pseudo}) => {
+const SptMenu:React.FunctionComponent<{}> = ({}) => {
     const [open, setOpen] = React.useState(false);
     const toggleDrawer = () => {
         setOpen(!open);
@@ -87,9 +87,8 @@ const SptMenu:React.FunctionComponent<{pseudo: string}> = ({pseudo}) => {
                             ...(open && { display: 'none' }),
                         }}
                     >
-                        <ChevronRight />
+                        <Menu />
                     </IconButton>
-                    <HomeIcon sx={{ marginBottom: '1px'}}/>
                     <Typography
                         component="h1"
                         variant="h6"
@@ -97,14 +96,14 @@ const SptMenu:React.FunctionComponent<{pseudo: string}> = ({pseudo}) => {
                         noWrap
                         sx={{ flexGrow: 1, paddingLeft: '5px' }}
                     >
-                        Accueil
+                        {HomeLinks.getHomeLink(spt.selectedHomeLinkKey)}
                     </Typography>
                     <Typography
                         component="h1"
                         variant="h6"
                         color="inherit"
                     >
-                        {pseudo}
+                        {spt.pseudo}
                     </Typography>
                     <IconButton
                         size="large"
@@ -133,7 +132,7 @@ const SptMenu:React.FunctionComponent<{pseudo: string}> = ({pseudo}) => {
                 <Divider />
                 <List>
                     {HomeLinks.get().map((homeLink) => (
-                        <ListItem button key={homeLink.key}>
+                        <ListItem button selected={spt.selectedHomeLinkKey === homeLink.key} key={homeLink.key}>
                             <ListItemIcon>
                                 {homeLink.icon}
                             </ListItemIcon>

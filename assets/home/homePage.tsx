@@ -4,7 +4,7 @@ import SptMenu from "./components/sptMenu";
 
 document.addEventListener("DOMContentLoaded", function() {
     ReactDOM.render(
-        <SptMenu pseudo = {spt.pseudo}/>,
+        <SptMenu/>,
         document.getElementById('root')
     );
 });

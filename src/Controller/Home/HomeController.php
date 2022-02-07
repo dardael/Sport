@@ -23,7 +23,10 @@ class HomeController extends AbstractController
             'base/base.html.twig',
             [
                 'files' => ['homePage'],
-                'variables' => ['pseudo' => $userBO->getUserPseudo()]
+                'variables' => [
+                    'pseudo' => $userBO->getUserPseudo(),
+                    'selectedHomeLinkKey' => 'home',
+                ]
             ]
         );
     }

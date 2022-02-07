@@ -10,6 +10,12 @@ class HomeLinks{
             new HomeLink('setting', 'Paramétrage', <SettingsIcon/>, '/settings'),
         ]
     }
+
+    static getHomeLink(key: string): HomeLink {
+        return HomeLinks.get().find((homeLink: HomeLink) => {
+           return key === homeLink.key;
+        });
+    }
 }
 
 export default HomeLinks;
