@@ -14,6 +14,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import {ListItem, ListItemIcon, ListItemText} from '@mui/material';
 import {AccountCircle, ChevronRight} from "@mui/icons-material";
 import SettingsIcon from '@mui/icons-material/Settings';
+import HomeLinks from "./HomeLinks";
 
 const drawerWidth: number = 240;
 
@@ -131,18 +132,14 @@ const SptMenu:React.FunctionComponent<{pseudo: string}> = ({pseudo}) => {
                 </Toolbar>
                 <Divider />
                 <List>
-                    <ListItem button key='home'>
-                        <ListItemIcon>
-                            <HomeIcon />
-                        </ListItemIcon>
-                        <ListItemText primary='Accueil' />
-                    </ListItem>
-                    <ListItem button key='settings'>
-                        <ListItemIcon>
-                            <SettingsIcon/>
-                        </ListItemIcon>
-                        <ListItemText primary='Paramétrage' />
-                    </ListItem>
+                    {HomeLinks.get().map((homeLink) => (
+                        <ListItem button key={homeLink.key}>
+                            <ListItemIcon>
+                                {homeLink.icon}
+                            </ListItemIcon>
+                            <ListItemText primary={homeLink.label} />
+                        </ListItem>
+                    ))}
                 </List>
             </Drawer>
         </Box>

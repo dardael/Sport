@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class HomeController extends AbstractController
 {
     /**
-     * @Route("/Home", name="home_display")
+     * @Route("/home", name="home_display")
      */
     public function display(UserBO $userBO): Response
     {
