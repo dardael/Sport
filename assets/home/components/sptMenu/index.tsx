@@ -10,10 +10,8 @@ import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import HomeIcon from '@mui/icons-material/Home';
-import {ListItem, ListItemIcon, ListItemText} from '@mui/material';
-import {AccountCircle, ChevronRight, Menu} from "@mui/icons-material";
-import SettingsIcon from '@mui/icons-material/Settings';
+import {ListItem, ListItemButton, ListItemIcon, ListItemText} from '@mui/material';
+import {AccountCircle, Menu} from "@mui/icons-material";
 import HomeLinks from "./HomeLinks";
 
 const drawerWidth: number = 240;
@@ -96,7 +94,7 @@ const SptMenu:React.FunctionComponent<{}> = ({}) => {
                         noWrap
                         sx={{ flexGrow: 1, paddingLeft: '5px' }}
                     >
-                        {HomeLinks.getHomeLink(spt.selectedHomeLinkKey)}
+                        {HomeLinks.getHomeLink(spt.selectedHomeLinkKey).label}
                     </Typography>
                     <Typography
                         component="h1"
@@ -132,12 +130,16 @@ const SptMenu:React.FunctionComponent<{}> = ({}) => {
                 <Divider />
                 <List>
                     {HomeLinks.get().map((homeLink) => (
-                        <ListItem button selected={spt.selectedHomeLinkKey === homeLink.key} key={homeLink.key}>
+                        <ListItemButton
+                            selected={spt.selectedHomeLinkKey === homeLink.key}
+                            key={homeLink.key}
+                            onClick={() => window.location.href=homeLink.link}
+                        >
                             <ListItemIcon>
                                 {homeLink.icon}
                             </ListItemIcon>
                             <ListItemText primary={homeLink.label} />
-                        </ListItem>
+                        </ListItemButton>
                     ))}
                 </List>
             </Drawer>
