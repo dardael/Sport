@@ -10,9 +10,10 @@ import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import {ListItem, ListItemButton, ListItemIcon, ListItemText} from '@mui/material';
+import {Container, ListItem, ListItemButton, ListItemIcon, ListItemText} from '@mui/material';
 import {AccountCircle, Menu} from "@mui/icons-material";
 import HomeLinks from "./HomeLinks";
+import {ReactNode} from "react";
 
 const drawerWidth: number = 240;
 
@@ -64,7 +65,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
     }),
 );
 
-const SptMenu:React.FunctionComponent<{}> = ({}) => {
+const SptMenu:React.FunctionComponent<{children: ReactNode}> = ({children}) => {
     const [open, setOpen] = React.useState(false);
     const toggleDrawer = () => {
         setOpen(!open);
@@ -143,6 +144,21 @@ const SptMenu:React.FunctionComponent<{}> = ({}) => {
                     ))}
                 </List>
             </Drawer>
+            <Box
+                component="main"
+                sx={{
+                    flexGrow: 1,
+                    overflow: 'auto',
+                }}
+            >
+                <Container
+                    sx={{
+                        height: 'calc(100% - 64px)'
+                    }}>
+                    <Toolbar />
+                    {children}
+                </Container>
+            </Box>
         </Box>
     );
 }
