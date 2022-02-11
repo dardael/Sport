@@ -14,6 +14,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class IdentificationController extends GenericController
 {
+    protected const IS_USER_NEEDED = false;
+
     private SessionInterface $session;
 
     public function __construct(UserBO $userBO, RequestStack $requestStack)

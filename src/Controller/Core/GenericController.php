@@ -15,18 +15,26 @@ class GenericController extends AbstractController
 {
     protected const IS_USER_NEEDED = true;
 
+    protected const MENU_CODE = '';
+
     protected UserBO $userBO;
 
     public function __construct(UserBO $userBO)
     {
         $this->userBO = $userBO;
-        if (self::IS_USER_NEEDED) {
+        if (static::IS_USER_NEEDED) {
             $userBO->authenticate();
         }
     }
 
     protected function getRenderResponse(string $file, array $variables = []): Response
     {
+        if (static::IS_USER_NEEDED) {
+            $variables['pseudo'] = $this->userBO->getUserPseudo();
+        }
+        if (!empty(static::MENU_CODE)) {
+            $variables['selectedHomeLinkKey'] = static::MENU_CODE;
+        }
         return $this->render(
             'base/base.html.twig',
             [

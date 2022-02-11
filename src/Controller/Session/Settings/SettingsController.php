@@ -10,14 +10,12 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class SettingsController extends GenericController
 {
+    protected const MENU_CODE = 'sessionSettings';
     /**
      * @Route("/session/settings", name="session_settings_display")
      */
     public function display(): Response
     {
-        return $this->getRenderResponse('sessionSettingsPage', [
-            'pseudo' => $this->userBO->getUserPseudo(),
-            'selectedHomeLinkKey' => 'home',
-        ]);
+        return $this->getRenderResponse('sessionSettingsPage');
     }
 }

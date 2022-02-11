@@ -10,17 +10,13 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class HomeController extends GenericController
 {
+    protected const MENU_CODE = 'home';
+
     /**
      * @Route("/home", name="home_display")
      */
     public function display(): Response
     {
-        return $this->getRenderResponse(
-            'homePage',
-            [
-                'pseudo' => $this->userBO->getUserPseudo(),
-                'selectedHomeLinkKey' => 'home',
-            ]
-        );
+        return $this->getRenderResponse('homePage');
     }
 }
