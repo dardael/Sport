@@ -47,7 +47,7 @@ services:
             - ME_CONFIG_BASICAUTH_USERNAME=admin
             - ME_CONFIG_BASICAUTH_PASSWORD=aty30ITE
         volumes:
-            - mongodb-data
+            - mongodb-data:/data/db
         depends_on:
             - mongodb
         ports:
