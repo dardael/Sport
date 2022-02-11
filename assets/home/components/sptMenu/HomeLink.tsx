@@ -1,6 +1,3 @@
-import {OverridableComponent} from "@mui/material/OverridableComponent";
-import {SvgIconTypeMap} from "@mui/material/SvgIcon/SvgIcon";
-
 class HomeLink {
     private readonly _key: string;
     private readonly _label: string;

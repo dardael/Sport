@@ -3,43 +3,41 @@ declare(strict_types = 1);
 // src/Controller/Security/IdentificationController.php
 namespace App\Controller\Security;
 
+use App\Controller\Core\GenericController;
 use App\Services\Account\AccountBO;
 use App\Services\Core\User\UserBO;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-class IdentificationController extends AbstractController
+class IdentificationController extends GenericController
 {
     private SessionInterface $session;
 
-    public function __construct(RequestStack $requestStack)
+    public function __construct(UserBO $userBO, RequestStack $requestStack)
     {
         $this->session = $requestStack->getSession();
+        parent::__construct($userBO);
     }
     /**
      * @Route("/", name="identification")
      */
     public function display(Request $request): Response
     {
-        return $this->render(
-            'base/base.html.twig',
+        return $this->getRenderResponse(
+            'authenticatePage',
             [
-                'files' => ['authenticatePage'],
-                'variables' => [
-                    'isFromCreation' => $request->query->has('isFromCreation'),
-                    'isFromInvalidCertification'
-                        => $request->query->has('isFromInvalidCertification'),
-                    'isFromValidCertification'
-                        => $request->query->has('isFromValidCertification'),
-                    'isFromForgottenEmail'
-                        => $request->query->has('isFromForgottenEmail'),
-                    'isFromInvalidConnection'
-                        => $request->query->has('isFromInvalidConnection'),
-                ]
+                'isFromCreation' => $request->query->has('isFromCreation'),
+                'isFromInvalidCertification'
+                    => $request->query->has('isFromInvalidCertification'),
+                'isFromValidCertification'
+                    => $request->query->has('isFromValidCertification'),
+                'isFromForgottenEmail'
+                    => $request->query->has('isFromForgottenEmail'),
+                'isFromInvalidConnection'
+                    => $request->query->has('isFromInvalidConnection'),
             ]
         );
     }
@@ -59,10 +57,10 @@ class IdentificationController extends AbstractController
     /**
      * @Route("/connect", name="connect")
      */
-    public function connect(Request $request, UserBO $userBO): Response
+    public function connect(Request $request): Response
     {
         try {
-            $userBO->connect($request->get('email'), $request->get('password'));
+            $this->userBO->connect($request->get('email'), $request->get('password'));
         } catch (\Exception $exception) {
             return $this->redirectToRoute(
                 'identification',

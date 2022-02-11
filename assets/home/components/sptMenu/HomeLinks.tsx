@@ -7,7 +7,7 @@ class HomeLinks{
     static get(): HomeLink[] {
         return [
             new HomeLink('home', 'Accueil', <HomeIcon/>, '/home'),
-            new HomeLink('setting', 'Paramétrage', <SettingsIcon/>, '/settings'),
+            new HomeLink('setting', 'Paramétrage', <SettingsIcon/>, '/session/settings'),
         ]
     }
 

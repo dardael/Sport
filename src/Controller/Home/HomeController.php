@@ -4,29 +4,22 @@ declare(strict_types = 1);
 
 namespace App\Controller\Home;
 
-use App\Services\Account\AccountBO;
-use App\Services\Core\User\UserBO;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
+use App\Controller\Core\GenericController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class HomeController extends AbstractController
+class HomeController extends GenericController
 {
     /**
      * @Route("/home", name="home_display")
      */
-    public function display(UserBO $userBO): Response
+    public function display(): Response
     {
-        $userBO->authenticate();
-        return $this->render(
-            'base/base.html.twig',
+        return $this->getRenderResponse(
+            'homePage',
             [
-                'files' => ['homePage'],
-                'variables' => [
-                    'pseudo' => $userBO->getUserPseudo(),
-                    'selectedHomeLinkKey' => 'home',
-                ]
+                'pseudo' => $this->userBO->getUserPseudo(),
+                'selectedHomeLinkKey' => 'home',
             ]
         );
     }

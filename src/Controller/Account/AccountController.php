@@ -2,23 +2,25 @@
 declare(strict_types = 1);
 namespace App\Controller\Account;
 
+use App\Controller\Core\GenericController;
 use App\Services\Account\AccountBO;
 use App\Services\Account\AccountDTO;
 use App\Services\Account\CertificationBO;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 
-class AccountController extends AbstractController
+class AccountController extends GenericController
 {
+    protected const IS_USER_NEEDED = false;
+
     /**
      * @Route("/account/create", name="account_creation")
      */
     public function displayCreationScreen(): Response
     {
-       return $this->render('base/base.html.twig', ['files'=> ['accountCreationPage']]);
+       return $this->getRenderResponse('accountCreationPage');
     }
 
     /**
@@ -36,15 +38,12 @@ class AccountController extends AbstractController
             return $this->redirectToRoute('identification', ['isFromCreation' => true]);
 
         } catch (\Exception $exception) {
-			return $this->render(
-				'base/base.html.twig',
-				[
-					'files' => ['accountCreationPage'],
-					'variables' => [
-						'email' => $request->query->get('email'),
-            			'pseudo' => $request->query->get('pseudo'),
-					]
-				]
+			return $this->getRenderResponse(
+                'accountCreationPage',
+                [
+                    'email' => $request->query->get('email'),
+                    'pseudo' => $request->query->get('pseudo'),
+                ]
 			);
 		}
     }
@@ -88,12 +87,9 @@ class AccountController extends AbstractController
      * @Route("/account/forgotten", name="account_forgotten")
      */
     public function displayForgottenPasswordScreen(Request $request): Response {
-        return $this->render(
-            'base/base.html.twig',
-            [
-                'files' => ['forgottenPasswordPage'],
-                'variables' => ['hasError' => $request->query->has('hasError')],
-            ]
+        return $this->getRenderResponse(
+            'forgottenPasswordPage',
+            ['hasError' => $request->query->has('hasError')]
         );
     }
 
