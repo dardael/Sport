@@ -1,5 +1,6 @@
 import React, {useState} from "react";
-import {DataGrid, GridColDef, GridRenderCellParams} from "@mui/x-data-grid";
+import {DataGrid, GridColDef, GridRenderCellParams, renderActionsCell, GridActionsCellItem} from "@mui/x-data-grid";
+import DeleteIcon from '@mui/icons-material/Delete';
 import {
     Button,
     FormControl,
@@ -73,6 +74,13 @@ const SessionDataGrid:React.FunctionComponent<{initialSessions?: Session[]}> = (
         setSessions(currentSessions);
     }
 
+    const deleteSession = (sessionId): void => {
+        let currentSessions = [...sessions];
+        let sessionIndex = currentSessions.findIndex((session) => session.id === sessionId);
+        currentSessions.splice(sessionIndex, 1);
+        setSessions(currentSessions);
+    }
+
     const getSession = (sessionId: number): Session => {
         return sessions.find((session:Session) => session.id === sessionId);
     };
@@ -82,21 +90,28 @@ const SessionDataGrid:React.FunctionComponent<{initialSessions?: Session[]}> = (
     }
 
     const getNewSessionId = (): number => {
-        return Math.max.apply(Math, sessions.map(function (session) {
+        return (Math.max.apply(Math, sessions.map(function (session) {
             return session.id;
-        })) || 1;
+        })) || 0) + 1;
     }
 
-    const columns: GridColDef[] = [
+    const columns = [
         {field: 'exercice', headerName: 'Exercice', width: 150, editable: true, renderCell: renderExerciceCell},
         {field: 'unit', headerName: 'Unité', width: 150, editable: true, renderCell: renderUnitCell},
         {field: 'description', headerName: 'Description', flex: 1, editable: true, renderCell: renderDescriptionCell},
+        {field: 'actions', type: 'actions', getActions: () => [
+            <GridActionsCellItem
+                icon={<DeleteIcon />}
+                label="Delete"
+                onClick={(session =>deleteSession(session.id))}
+            />
+        ]},
     ];
     return <>
-        <Button size="small" onClick={() => updateSession()}>
+        <DataGrid editMode="row" hideFooter autoHeight rows={sessions} columns={columns} />
+        <Button variant="outlined" fullWidth onClick={() => updateSession()}>
             Ajouter un exercice
         </Button>
-        <DataGrid editMode="row" rows={sessions} columns={columns} />
     </>
 }
 
