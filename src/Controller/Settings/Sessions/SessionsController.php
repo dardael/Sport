@@ -15,7 +15,7 @@ class SessionsController extends GenericController
     protected const MENU_CODE = 'sessionSettings';
 
     /**
-     * @Route("/sessions/settings", name="sessions_settings_display")
+     * @Route("/settings/sessions", name="sessions_settings_display")
      */
     public function display(SessionsBO $sessionsBO): Response
     {
@@ -28,7 +28,7 @@ class SessionsController extends GenericController
 
     /**
      *
-     * @Route("/sessions/settings/save", name="sessions_settings_save")
+     * @Route("/settings/sessions/save", name="sessions_settings_save")
      */
     public function save(Request $request, SessionsBO $sessionsBO): Response
     {

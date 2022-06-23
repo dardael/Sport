@@ -14,7 +14,6 @@ const SessionDataGrid:React.FunctionComponent<{initialSessions?: Session[]}> = (
         : [new Session(1, '', 'rep', '')]);
 
     const saveSessions = async (sessions) => {
-        debugger
         let formData = new FormData();
         sessions.forEach((session) => {
             let sessionKey = 'sessions[' + session.id + ']';
@@ -24,7 +23,7 @@ const SessionDataGrid:React.FunctionComponent<{initialSessions?: Session[]}> = (
             formData.append(sessionKey + '[description]', session.description);
         })
         await fetch(
-            '/sessions/settings/save',
+            '/settings/sessions/save',
             {
                 method: 'POST',
                 body: formData,
