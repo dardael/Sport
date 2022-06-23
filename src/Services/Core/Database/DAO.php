@@ -29,9 +29,22 @@ abstract class DAO
         return $this->getDatabase()->{static::COLLECTION};
     }
 
+    protected function findOneWithFields(
+        array $filter,
+        array $fields
+    ): ?array {
+        $projection = array_merge(array_fill_keys($fields, 1), ['_id' => 0]);
+        return $this->getCollection()->findOne($filter, ['projection' => $projection]);
+    }
+
     private function getDatabase(): MongoDB\Database
     {
-        $client = new MongoDB\Client("mongodb://dardael:aty30ITE@mongodb:27017");
+        $options = ["typeMap" => ['root' => 'array', 'document' => 'array']];
+        $client = new MongoDB\Client(
+            "mongodb://dardael:aty30ITE@mongodb:27017",
+            [],
+            $options
+        );
         return $client->sport;
     }
 }

@@ -1,27 +1,36 @@
 import React, {useState} from "react";
 import {
     DataGrid,
-    GridColDef,
-    GridRenderCellParams,
-    renderActionsCell,
     GridActionsCellItem,
     GridValueFormatterParams
 } from "@mui/x-data-grid";
 import DeleteIcon from '@mui/icons-material/Delete';
-import {
-    Button,
-    FormControl,
-    InputBase,
-    makeStyles,
-    MenuItem,
-    Select,
-    SelectChangeEvent,
-    TextField
-} from "@mui/material";
-import Session from "../../../entities/Session";
+import {Button} from "@mui/material";
+import Session from "../../entities/Session";
 
 const SessionDataGrid:React.FunctionComponent<{initialSessions?: Session[]}> = ({initialSessions}) => {
-    const [sessions, setSessions] = useState(initialSessions ? initialSessions : [new Session(1, '', 'rep', '')]);
+    const [sessions, setSessions] = useState(initialSessions && initialSessions.length > 0
+        ? initialSessions
+        : [new Session(1, '', 'rep', '')]);
+
+    const saveSessions = async (sessions) => {
+        debugger
+        let formData = new FormData();
+        sessions.forEach((session) => {
+            let sessionKey = 'sessions[' + session.id + ']';
+            formData.append(sessionKey + '[id]', session.id);
+            formData.append(sessionKey + '[exercice]', session.exercice);
+            formData.append(sessionKey + '[unit]', session.unit);
+            formData.append(sessionKey + '[description]', session.description);
+        })
+        await fetch(
+            '/sessions/settings/save',
+            {
+                method: 'POST',
+                body: formData,
+            }
+        );
+    };
 
     const updateSession = (newSessionProperty): void => {
         let currentSessions = [...sessions];
@@ -29,12 +38,14 @@ const SessionDataGrid:React.FunctionComponent<{initialSessions?: Session[]}> = (
         let sessionIndex = currentSessions.findIndex((session) => session.id === newSessionProperty.id);
         currentSession[newSessionProperty.field] =newSessionProperty.value;
         currentSessions[sessionIndex] = currentSession;
+        saveSessions(currentSessions);
         setSessions(currentSessions);
     }
 
     const addSession = (): void => {
         let currentSessions = [...sessions];
         currentSessions.push(getNewSession())
+        saveSessions(currentSessions);
         setSessions(currentSessions);
     }
 
@@ -42,6 +53,7 @@ const SessionDataGrid:React.FunctionComponent<{initialSessions?: Session[]}> = (
         let currentSessions = [...sessions];
         let sessionIndex = currentSessions.findIndex((session) => session.id === sessionId);
         currentSessions.splice(sessionIndex, 1);
+        saveSessions(currentSessions);
         setSessions(currentSessions);
     }
 

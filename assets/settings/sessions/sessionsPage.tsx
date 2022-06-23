@@ -4,8 +4,9 @@ import SptMenu from "../../home/components/sptMenu";
 import SessionDataGrid from "./components/sessionDataGrid";
 
 document.addEventListener("DOMContentLoaded", function() {
+    console.log(spt.sessions)
     ReactDOM.render(
-        <SptMenu><SessionDataGrid/></SptMenu>,
+        <SptMenu><SessionDataGrid initialSessions={spt.sessions}/></SptMenu>,
         document.getElementById('root')
     );
 });
