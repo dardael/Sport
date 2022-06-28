@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace App\Controller\Sessions;
 
 use App\Controller\Core\GenericController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Services\Settings\Sessions\SessionsBO as SessionTypesBO;
@@ -23,4 +24,14 @@ class SessionsController extends GenericController
             ['sessionTypes' => $sessionTypes, 'sessions' => []]
         );
     }
+
+    /**
+     *
+     * @Route("/sessions/save", name="sessions_save")
+     */
+    public function save(Request $request): Response
+    {
+        return $this->json(true);
+    }
+
 }

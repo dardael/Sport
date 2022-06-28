@@ -25,7 +25,7 @@ const SessionsDataGrid: React.FunctionComponent<{
         sessions.forEach((session:Session, index:number) => {
             let sessionKey = 'sessions[' + index + ']';
             formData.append(sessionKey + '[id]', String(session.id));
-            formData.append(sessionKey + '[sessionType][id]', String(session.sessionType.id));
+            formData.append(sessionKey + '[sessionType][id]', String(session.sessionType ? session.sessionType.id : null));
             formData.append(sessionKey + '[value]', String(session.value));
             formData.append(sessionKey + '[date]', session.date ? session.date.toDateString() : '');
         })
@@ -92,11 +92,30 @@ const SessionsDataGrid: React.FunctionComponent<{
                 sessionTypes.map((sessionType) => {
                     return {value: sessionType.id, label: sessionType.exercice}
                 }),
+            valueGetter: (param) => {
+                if (!param.row.sessionType) {
+                    return ''
+                }
+                const currentType = sessionTypes.find((sessionType) => sessionType.id === param.row.sessionType);
+                return currentType.exercice;
+            },
             flex: 1,
             minWidth: 10        },
         {field: 'value', headerName: 'Valeur', editable: true, type:'number', flex: 1,  minWidth: 10},
-        {field: 'unit', headerName: 'Unité', type:'string', flex: 1,  minWidth: 10},
         {
+            field: 'unit', headerName: 'Unité', type: 'string', flex: 1, minWidth: 10, valueGetter: (param) => {
+                switch (param.row.unit) {
+                    case 'rep':
+                        return 'Repetition';
+                    case 'min':
+                        return 'Minute';
+                    case 'sec':
+                        return 'Seconde';
+                    default :
+                        return '';
+                }
+            }
+        }, {
             field: 'actions', type: 'actions', getActions: (session) => [
                 <GridActionsCellItem
                     icon={<DeleteIcon/>}
