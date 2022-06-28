@@ -82,7 +82,7 @@ const SessionsDataGrid: React.FunctionComponent<{
     }
 
     const columns = [
-        {field: 'date', headerName: 'Date', editable: true, type:'dateTime'},
+        {field: 'date', headerName: 'Date', editable: true, type:'dateTime', flex: 1,  minWidth: 10},
         {
             field: 'sessionType',
             headerName: 'Exercice',
@@ -91,17 +91,21 @@ const SessionsDataGrid: React.FunctionComponent<{
             valueOptions:
                 sessionTypes.map((sessionType) => {
                     return {value: sessionType.id, label: sessionType.exercice}
-                })
+                }),
+            flex: 1,
+            minWidth: 10        },
+        {field: 'value', headerName: 'Valeur', editable: true, type:'number', flex: 1,  minWidth: 10},
+        {field: 'unit', headerName: 'Unité', type:'string', flex: 1,  minWidth: 10},
+        {
+            field: 'actions', type: 'actions', getActions: (session) => [
+                <GridActionsCellItem
+                    icon={<DeleteIcon/>}
+                    label="Delete"
+                    onClick={(() => deleteSession(session.id))}
+                />
+            ],
+            flex: 1
         },
-        {field: 'value', headerName: 'Valeur', editable: true, type:'number'},
-        {field: 'unit', headerName: 'Unité', type:'string'},
-        {field: 'actions', type: 'actions', getActions: (session) => [
-            <GridActionsCellItem
-                icon={<DeleteIcon />}
-                label="Delete"
-                onClick={(() => deleteSession(session.id))}
-            />
-        ]},
     ];
     return <>
         <div style={{ display: 'flex', height: '100%' }}>
@@ -120,11 +124,12 @@ const SessionsDataGrid: React.FunctionComponent<{
                     })}
                     columns={columns}
                     onCellEditCommit={updateSession}/>
+                <Button variant="outlined" fullWidth onClick={addSession}>
+                    Ajouter un exercice
+                </Button>
             </div>
         </div>
-        <Button variant="outlined" fullWidth onClick={addSession}>
-            Ajouter un exercice
-        </Button>
+
     </>
 }
 
