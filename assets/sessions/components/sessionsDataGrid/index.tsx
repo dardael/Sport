@@ -1,8 +1,7 @@
 import React, {useState} from "react";
 import {
     DataGrid,
-    GridActionsCellItem, GridCellParams,
-    GridValueFormatterParams, useGridApiRef
+    GridActionsCellItem
 } from "@mui/x-data-grid";
 import DeleteIcon from '@mui/icons-material/Delete';
 import {Button} from "@mui/material";
@@ -25,9 +24,12 @@ const SessionsDataGrid: React.FunctionComponent<{
         sessions.forEach((session:Session, index:number) => {
             let sessionKey = 'sessions[' + index + ']';
             formData.append(sessionKey + '[id]', String(session.id));
-            formData.append(sessionKey + '[sessionType][id]', String(session.sessionType ? session.sessionType.id : null));
+            formData.append(sessionKey + '[sessionTypeId]', String(session.sessionTypeId));
             formData.append(sessionKey + '[value]', String(session.value));
-            formData.append(sessionKey + '[date]', session.date ? session.date.toDateString() : '');
+            formData.append(
+                sessionKey + '[date]',
+                session.date ? session.date.toString() : ''
+            );
         })
         await fetch(
             '/sessions/save',
@@ -42,11 +44,7 @@ const SessionsDataGrid: React.FunctionComponent<{
         let currentSessions = [...sessions];
         let currentSession = {...getSession(newSessionProperty.id)} as Session;
         let sessionIndex = currentSessions.findIndex((session) => session.id === newSessionProperty.id);
-        if (newSessionProperty.field === 'sessionType') {
-            currentSession.sessionType = sessionTypes.find((sessionType) => newSessionProperty.value === sessionType.id);
-        } else {
-            currentSession[newSessionProperty.field] = newSessionProperty.value;
-        }
+        currentSession[newSessionProperty.field] = newSessionProperty.value;
         currentSessions[sessionIndex] = currentSession;
         saveSessions(currentSessions);
         setSessions(currentSessions);
@@ -81,10 +79,15 @@ const SessionsDataGrid: React.FunctionComponent<{
             : 1;
     }
 
+    const getSessionTypeUnit = (sessionTypeId: number): string => {
+        const session = sessionTypes.find((sessionType: SessionType) => sessionTypeId === sessionType.id)
+        return session ? session.unit : '';
+    }
+
     const columns = [
         {field: 'date', headerName: 'Date', editable: true, type:'dateTime', flex: 1,  minWidth: 10},
         {
-            field: 'sessionType',
+            field: 'sessionTypeId',
             headerName: 'Exercice',
             editable: true,
             type: 'singleSelect',
@@ -93,10 +96,10 @@ const SessionsDataGrid: React.FunctionComponent<{
                     return {value: sessionType.id, label: sessionType.exercice}
                 }),
             valueGetter: (param) => {
-                if (!param.row.sessionType) {
+                if (!param.row.sessionTypeId) {
                     return ''
                 }
-                const currentType = sessionTypes.find((sessionType) => sessionType.id === param.row.sessionType);
+                const currentType = sessionTypes.find((sessionType) => sessionType.id === param.row.sessionTypeId);
                 return currentType.exercice;
             },
             flex: 1,
@@ -131,16 +134,15 @@ const SessionsDataGrid: React.FunctionComponent<{
         <div style={{ display: 'flex', height: '100%' }}>
             <div style={{ flexGrow: 1 }}>
                 <DataGrid
-                    experimentalFeatures={{ newEditingApi: true }}
                     hideFooter
                     autoHeight
                     rows={sessions.map((session) => {
                         return {
                             id:session.id,
-                            date:session.date,
-                            sessionType:session.sessionType ? session.sessionType.id : null,
+                            date:session.date ? new Date(session.date) : null,
+                            sessionTypeId:session.sessionTypeId,
                             value:session.value,
-                            unit:session.sessionType ? session.sessionType.unit : null,
+                            unit:getSessionTypeUnit(session.sessionTypeId),
                         }
                     })}
                     columns={columns}

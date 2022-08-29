@@ -1,12 +1,12 @@
 import SessionType from '../../../settings/sessions/entities/Session';
 class Session {
     public id: number;
-    public sessionType: SessionType;
+    public sessionTypeId: number;
     public value: number;
     public date: Date;
-    constructor(id: number, sessionType: SessionType, value: number, date: Date) {
+    constructor(id: number, sessionTypeId: number, value: number, date: Date) {
         this.id = id;
-        this.sessionType = sessionType;
+        this.sessionTypeId = sessionTypeId;
         this.value = value;
         this.date = date;
     }

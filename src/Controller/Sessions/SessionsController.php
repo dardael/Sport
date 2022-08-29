@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace App\Controller\Sessions;
 
 use App\Controller\Core\GenericController;
+use App\Services\Sessions\SessionsBO;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -16,12 +17,15 @@ class SessionsController extends GenericController
     /**
      * @Route("/sessions", name="sessions_display")
      */
-    public function display(SessionTypesBO $sessionTypesBO): Response
-    {
+    public function display(
+        SessionsBo $sessionsBo,
+        SessionTypesBO $sessionTypesBO
+    ): Response {
+        $sessions = $sessionsBo->getSessions($this->userBO->getUserPseudo());
         $sessionTypes = $sessionTypesBO->getSessions($this->userBO->getUserPseudo());
         return $this->getRenderResponse(
             'sessionsPage',
-            ['sessionTypes' => $sessionTypes, 'sessions' => []]
+            ['sessions' => $sessions, 'sessionTypes' => $sessionTypes]
         );
     }
 
@@ -29,8 +33,10 @@ class SessionsController extends GenericController
      *
      * @Route("/sessions/save", name="sessions_save")
      */
-    public function save(Request $request): Response
+    public function save(Request $request, SessionsBo $sessionsBo): Response
     {
+        $sessions = $request->get('sessions');
+        $sessionsBo->saveSessions($this->userBO->getUserPseudo(), $sessions?:[]);
         return $this->json(true);
     }
 
