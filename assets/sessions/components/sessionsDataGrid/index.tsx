@@ -1,8 +1,8 @@
 import React, {useState} from "react";
 import {
     DataGrid,
-    GridActionsCellItem,
-    GridValueFormatterParams
+    GridActionsCellItem, GridCellParams,
+    GridValueFormatterParams, useGridApiRef
 } from "@mui/x-data-grid";
 import DeleteIcon from '@mui/icons-material/Delete';
 import {Button} from "@mui/material";
@@ -126,10 +126,12 @@ const SessionsDataGrid: React.FunctionComponent<{
             flex: 1
         },
     ];
+
     return <>
         <div style={{ display: 'flex', height: '100%' }}>
             <div style={{ flexGrow: 1 }}>
                 <DataGrid
+                    experimentalFeatures={{ newEditingApi: true }}
                     hideFooter
                     autoHeight
                     rows={sessions.map((session) => {
@@ -142,7 +144,8 @@ const SessionsDataGrid: React.FunctionComponent<{
                         }
                     })}
                     columns={columns}
-                    onCellEditCommit={updateSession}/>
+                    onCellEditCommit={updateSession}
+                />
                 <Button variant="outlined" fullWidth onClick={addSession}>
                     Ajouter un exercice
                 </Button>
