@@ -38,7 +38,8 @@
     "prop-types": "^15.8.1",
     "react": "^17.0.2",
     "react-bootstrap": "^2.1.1",
-    "react-dom": "^17.0.2"
+    "react-dom": "^17.0.2",
+    "recharts": "^2.1.14"
   },
   "name": "Sport",
   "description": "",
