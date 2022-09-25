@@ -24,5 +24,15 @@ docker-compose run --rm php composer require my-library
 
 Run PHPUnit:
 ```
-docker-compose exec php php ./vendor/bin/phpunit
+npm run test:back
 ```
+
+Run JEST:
+```
+npm run test:front
+```
+Run all tests:
+```
+npm run test
+```
+

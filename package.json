@@ -29,8 +29,9 @@
     "dev": "encore dev",
     "watch": "encore dev --watch",
     "build": "encore production --progress",
-    "test": "docker-compose exec php php ./vendor/bin/phpunit",
-    "test:front": "jest"
+    "test:back": "docker-compose exec php php ./vendor/bin/phpunit",
+    "test:front": "jest",
+    "test": "jest && docker-compose exec php php ./vendor/bin/phpunit"
   },
   "dependencies": {
     "@emotion/react": "^11.10.4",
