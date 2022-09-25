@@ -1,17 +1,17 @@
 import React, {useState} from "react";
 import {
     DataGrid,
-    GridActionsCellItem,
-    GridValueFormatterParams
+    GridActionsCellItem, GridValueFormatterParams
 } from "@mui/x-data-grid";
 import DeleteIcon from '@mui/icons-material/Delete';
 import {Button} from "@mui/material";
 import Session from "../../entities/Session";
+import {TwitterPicker} from 'react-color'
 
 const SessionDataGrid:React.FunctionComponent<{initialSessions?: Session[]}> = ({initialSessions}) => {
     const [sessions, setSessions] = useState(initialSessions && initialSessions.length > 0
         ? initialSessions
-        : [new Session(1, '', 'rep', '')]);
+        : [new Session(1, '', 'rep', '', '')]);
 
     const saveSessions = async (sessions) => {
         let formData = new FormData();
@@ -21,6 +21,7 @@ const SessionDataGrid:React.FunctionComponent<{initialSessions?: Session[]}> = (
             formData.append(sessionKey + '[exercice]', session.exercice);
             formData.append(sessionKey + '[unit]', session.unit);
             formData.append(sessionKey + '[description]', session.description);
+            formData.append(sessionKey + '[color]', session.color);
         })
         await fetch(
             '/settings/sessions/save',
@@ -61,7 +62,7 @@ const SessionDataGrid:React.FunctionComponent<{initialSessions?: Session[]}> = (
     };
 
     const getNewSession = (): Session => {
-        return new Session(getNewSessionId(), '', 'rep', '');
+        return new Session(getNewSessionId(), '', 'rep', '', '');
     }
 
     const getNewSessionId = (): number => {
@@ -89,6 +90,13 @@ const SessionDataGrid:React.FunctionComponent<{initialSessions?: Session[]}> = (
             }
         }},
         {field: 'description', headerName: 'Description', flex: 1, editable: true},
+        {field: 'color', headerName: 'Couleur', width:300, renderCell:(params) => (
+                <TwitterPicker color={params.value} onChangeComplete={(color) => updateSession({
+                    id: params.id,
+                    field: params.field,
+                    value: color.hex,
+                })}></TwitterPicker>
+            )},
         {field: 'actions', type: 'actions', getActions: (session) => [
             <GridActionsCellItem
                 icon={<DeleteIcon />}
@@ -103,6 +111,7 @@ const SessionDataGrid:React.FunctionComponent<{initialSessions?: Session[]}> = (
             autoHeight
             rows={sessions}
             columns={columns}
+            rowHeight={100}
             onCellEditCommit={updateSession}/>
         <Button variant="outlined" fullWidth onClick={addSession}>
             Ajouter un exercice

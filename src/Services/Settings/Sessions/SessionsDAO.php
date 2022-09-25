@@ -20,7 +20,8 @@ class SessionsDAO extends DAO
                 (int) $session['id'],
                 $session['exercice'],
                 Unit::from($session['unit']),
-                $session['description']
+                $session['description'],
+                $session['color']??'',
             ),
             $settings['sessions'] ?? []
         ));
