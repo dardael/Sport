@@ -11,6 +11,20 @@ class Session {
         this.description = description;
         this.color = color;
     }
+
+    static getUnitName(unit:string): string
+    {
+        switch (unit) {
+            case 'rep':
+                return 'Repetition';
+            case 'min':
+                return 'Minute';
+            case 'sec':
+                return 'Seconde';
+            default :
+                return '';
+        }
+    }
 }
 
 export default Session;

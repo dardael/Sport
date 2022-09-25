@@ -12,9 +12,9 @@ describe('getSessionsTypes', () => {
             new Session(1,1,2, new Date()),
         ];
         const sessionsTypes = [
-            new SessionType(1, 'pompe', 'repetition', '', ''),
-            new SessionType(3, 'abdo', 'repetition', '', ''),
-            new SessionType(2, 'squat', 'repetition', '', ''),
+            new SessionType(1, 'pompe', 'rep', '', ''),
+            new SessionType(3, 'abdo', 'rep', '', ''),
+            new SessionType(2, 'squat', 'rep', '', ''),
         ]
         expect(new SessionsFormatter(sessions,sessionsTypes).getSessionsTypes())
             .toStrictEqual([sessionsTypes[1], sessionsTypes[0]]);
@@ -26,9 +26,9 @@ describe('getSessionsTypes', () => {
             new Session(1,3,2, new Date()),
         ];
         const sessionsTypes = [
-            new SessionType(1, 'pompe', 'repetition', '', ''),
-            new SessionType(3, 'abdo', 'repetition', '', ''),
-            new SessionType(2, 'squat', 'repetition', '', ''),
+            new SessionType(1, 'pompe', 'rep', '', ''),
+            new SessionType(3, 'abdo', 'rep', '', ''),
+            new SessionType(2, 'squat', 'rep', '', ''),
         ]
         expect(new SessionsFormatter(sessions, sessionsTypes).getSessionsTypes())
             .toStrictEqual([sessionsTypes[0], sessionsTypes[1]]);
@@ -86,12 +86,12 @@ describe('getSummedSessionsValuesByExercices', () => {
             new Session(1,1,2, new Date()),
         ];
         const sessionsTypes = [
-            new SessionType(1, 'pompe', 'repetition', '', ''),
+            new SessionType(1, 'pompe', 'rep', '', ''),
         ];
         expect(new SessionsFormatter(sessions, sessionsTypes).getSummedSessionsValuesByExercices())
             .toStrictEqual([{
                 name: 'pompe',
-                pompe: 2,
+                Repetition: 2,
             }]);
     });
     test('works with two sessions of the same type', () => {
@@ -100,13 +100,13 @@ describe('getSummedSessionsValuesByExercices', () => {
             new Session(2,1,4, new Date()),
         ];
         const sessionsTypes = [
-            new SessionType(1, 'pompe', 'repetition', '', ''),
+            new SessionType(1, 'pompe', 'rep', '', ''),
         ];
         expect(new SessionsFormatter(sessions, sessionsTypes).getSummedSessionsValuesByExercices())
             .toStrictEqual([
                 {
                     name : 'pompe',
-                    pompe : 6,
+                    Repetition : 6,
                 }
             ]);
     });
@@ -117,18 +117,18 @@ describe('getSummedSessionsValuesByExercices', () => {
             new Session(3,1,4, new Date()),
         ];
         const sessionsTypes = [
-            new SessionType(1, 'pompe', 'repetition', '', ''),
-            new SessionType(2, 'abdo', 'repetition', '', ''),
+            new SessionType(1, 'pompe', 'rep', '', ''),
+            new SessionType(2, 'abdo', 'rep', '', ''),
         ];
         expect(new SessionsFormatter(sessions, sessionsTypes).getSummedSessionsValuesByExercices())
             .toStrictEqual([
                 {
                     name : 'pompe',
-                    pompe : 6,
+                    Repetition : 6,
                 },
                 {
                     name : 'abdo',
-                    abdo : 5,
+                    Repetition : 5,
                 },
             ]);
     });

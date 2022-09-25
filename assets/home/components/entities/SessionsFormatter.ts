@@ -24,18 +24,20 @@ class SessionsFormatter {
         let points = {};
         this.sessions.forEach(session => {
             const sessionType = this.getSessionType(session.sessionTypeId);
+            const sessionUnit = SessionType.getUnitName(sessionType.unit)
             if(!points[sessionType.id]){
                 points[sessionType.id] = {
                     name: sessionType.exercice
                 };
-                points[sessionType.id][sessionType.exercice] = 0;
+                points[sessionType.id][sessionUnit] = 0;
             }
-            points[sessionType.id][sessionType.exercice]+=session.value;
+            points[sessionType.id][sessionUnit]+=session.value;
         });
         return Object.values(points);
     }
 
     private getSessionType(sessionTypeId: number):SessionType {
+        console.log(this.sessionsTypes.find(sessionType => sessionType.id === sessionTypeId))
         return this.sessionsTypes.find(sessionType => sessionType.id === sessionTypeId)
     }
 }

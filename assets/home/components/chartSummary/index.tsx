@@ -20,7 +20,7 @@ const ChartSummary:React.FunctionComponent<{
             <Tooltip />
             <Legend />
              {usedSessionsTypes.map(sessionType => {
-                return <Bar key={sessionType.id} dataKey={sessionType.exercice} fill={sessionType.color}/>
+                return <Bar key={sessionType.id} dataKey={SessionType.getUnitName(sessionType.unit)} fill={sessionType.color}/>
              })}
         </BarChart>
     </>

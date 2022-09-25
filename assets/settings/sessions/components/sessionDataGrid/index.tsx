@@ -78,16 +78,7 @@ const SessionDataGrid:React.FunctionComponent<{initialSessions?: Session[]}> = (
             {value:'min', label:'Minute'},
             {value:'sec', label:'Seconde'},
         ], valueFormatter: (sessionUnit: GridValueFormatterParams) => {
-            switch (sessionUnit.value) {
-                case 'rep':
-                    return 'Repetition';
-                case 'min':
-                    return 'Minute';
-                case 'sec':
-                    return 'Seconde';
-                default :
-                    return '';
-            }
+            return Session.getUnitName(sessionUnit.value);
         }},
         {field: 'description', headerName: 'Description', flex: 1, editable: true},
         {field: 'color', headerName: 'Couleur', width:300, renderCell:(params) => (
