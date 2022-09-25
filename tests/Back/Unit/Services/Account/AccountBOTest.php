@@ -2,15 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\Services\Account;
+namespace App\Tests\Back\Unit\Services\Account;
 
+use App\Services\Account\AccountBO;
+use App\Services\Account\AccountDAO;
 use App\Services\Account\AccountDTO;
 use App\Services\Account\CertificationBO;
 use App\Services\Account\CreationErrors;
-use App\Services\Core\Mail\Mailer;
 use PHPUnit\Framework\TestCase;
-use App\Services\Account\AccountBO;
-use App\Services\Account\AccountDAO;
 
 class AccountBOTest extends TestCase
 {

@@ -18,10 +18,10 @@ class SessionsController extends GenericController
      * @Route("/sessions", name="sessions_display")
      */
     public function display(
-        SessionsBo $sessionsBo,
+        SessionsBO $sessionsBO,
         SessionTypesBO $sessionTypesBO
     ): Response {
-        $sessions = $sessionsBo->getSessions($this->userBO->getUserPseudo());
+        $sessions = $sessionsBO->getSessions($this->userBO->getUserPseudo());
         $sessionTypes = $sessionTypesBO->getSessions($this->userBO->getUserPseudo());
         return $this->getRenderResponse(
             'sessionsPage',
