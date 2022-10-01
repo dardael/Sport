@@ -17,7 +17,7 @@ const ChartSummary:React.FunctionComponent<{
     const sessionsFormatter = new SessionsFormatter(sessions, sessionsTypes);
     const usedSessionsTypes = sessionsFormatter.getSessionsTypes();
     return <>
-        <Box sx={{ height: '100%',flexGrow: 1, paddingTop:'20px' }}>
+        <Box sx={{ height: '100%',flexGrow: 1 }}>
             <Grid
                 container
                 direction="row"

@@ -156,7 +156,9 @@ const SptMenu:React.FunctionComponent<{children: ReactNode}> = ({children}) => {
                         height: 'calc(100% - 64px)'
                     }}>
                     <Toolbar />
-                    {children}
+                    <Box sx={{paddingTop: '20px'}}>
+                        {children}
+                    </Box>
                 </Container>
             </Box>
         </Box>
