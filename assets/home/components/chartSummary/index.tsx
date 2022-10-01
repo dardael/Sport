@@ -3,6 +3,8 @@ import Session from "../../../sessions/components/entities/Session";
 import {BarChart, Bar, Legend, Tooltip, XAxis, YAxis, ResponsiveContainer} from "recharts";
 import SessionsFormatter from "../entities/SessionsFormatter";
 import SessionType from "../../../settings/sessions/entities/Session";
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
 
 const ChartSummary:React.FunctionComponent<{
     sessions?: Session[],
@@ -14,17 +16,29 @@ const ChartSummary:React.FunctionComponent<{
     const sessionsFormatter = new SessionsFormatter(sessions, sessionsTypes);
     const usedSessionsTypes = sessionsFormatter.getSessionsTypes();
     return <>
-        {usedSessionsTypes.map(sessionType => {
-            return <ResponsiveContainer key={sessionType.id}>
-                <BarChart data={sessionsFormatter.getSessionsOrderedByDate(sessionType.id)}>
-                    <XAxis dataKey="date"/>
-                    <YAxis/>
-                    <Tooltip/>
-                    <Legend/>
-                    <Bar dataKey={SessionType.getUnitName(sessionType.unit)} fill={sessionType.color}/>
-                </BarChart>
-            </ResponsiveContainer>
-        })}
+        <Box sx={{ height: '100%',flexGrow: 1, paddingTop:'20px' }}>
+            <Grid
+                container
+                direction="row"
+                justifyContent="center"
+                alignItems="center"
+                spacing={8}
+            >
+            {usedSessionsTypes.map(sessionType => {
+                return <Grid key={sessionType.id} item xs={12} sm md>
+                    <ResponsiveContainer height={300}>
+                        <BarChart data={sessionsFormatter.getSessionsOrderedByDate(sessionType.id)}>
+                            <XAxis dataKey="date"/>
+                            <YAxis/>
+                            <Tooltip/>
+                            <Legend/>
+                            <Bar dataKey={SessionType.getUnitName(sessionType.unit)} fill={sessionType.color}/>
+                        </BarChart>
+                    </ResponsiveContainer>
+                </Grid>
+            })}
+            </Grid>
+        </Box>
     </>
 }
 
