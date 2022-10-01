@@ -1,6 +1,6 @@
 import React from "react";
 import Session from "../../../sessions/components/entities/Session";
-import {BarChart, Bar, Legend, Tooltip, XAxis, YAxis} from "recharts";
+import {BarChart, Bar, Legend, Tooltip, XAxis, YAxis, ResponsiveContainer} from "recharts";
 import SessionsFormatter from "../entities/SessionsFormatter";
 import SessionType from "../../../settings/sessions/entities/Session";
 
@@ -14,15 +14,17 @@ const ChartSummary:React.FunctionComponent<{
     const sessionsFormatter = new SessionsFormatter(sessions, sessionsTypes);
     const usedSessionsTypes = sessionsFormatter.getSessionsTypes();
     return <>
-         <BarChart width={730} height={250} data={sessionsFormatter.getSummedSessionsValuesByExercices()}>
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-             {usedSessionsTypes.map(sessionType => {
-                return <Bar key={sessionType.id} dataKey={SessionType.getUnitName(sessionType.unit)} fill={sessionType.color}/>
-             })}
-        </BarChart>
+        {usedSessionsTypes.map(sessionType => {
+            return <ResponsiveContainer key={sessionType.id}>
+                <BarChart data={sessionsFormatter.getSessionsOrderedByDate(sessionType.id)}>
+                    <XAxis dataKey="date"/>
+                    <YAxis/>
+                    <Tooltip/>
+                    <Legend/>
+                    <Bar dataKey={SessionType.getUnitName(sessionType.unit)} fill={sessionType.color}/>
+                </BarChart>
+            </ResponsiveContainer>
+        })}
     </>
 }
 

@@ -14,10 +14,17 @@ class SessionsFormatter {
             .map(sessionTypeId => this.getSessionType(sessionTypeId));
     }
 
-    getSessionsOrderedByDate(sessionTypeId: number):Session[] {
+    getSessionsOrderedByDate(sessionTypeId: number) {
+        const sessionType = this.getSessionType(sessionTypeId);
+        const sessionUnit = SessionType.getUnitName(sessionType.unit)
         return this.sessions
             .filter((session:Session)=>session.sessionTypeId === sessionTypeId)
             .sort((aSession:Session, anotherSession:Session) => aSession.date >= anotherSession.date ? 1 : -1)
+            .map((session:Session) => {
+                let point = {date: (new Date(session.date)).toLocaleDateString()};
+                point[sessionUnit] = session.value
+                return point
+            })
     }
 
     getSummedSessionsValuesByExercices() {
@@ -37,7 +44,6 @@ class SessionsFormatter {
     }
 
     private getSessionType(sessionTypeId: number):SessionType {
-        console.log(this.sessionsTypes.find(sessionType => sessionType.id === sessionTypeId))
         return this.sessionsTypes.find(sessionType => sessionType.id === sessionTypeId)
     }
 }

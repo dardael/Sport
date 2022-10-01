@@ -36,7 +36,10 @@ describe('getSessionsTypes', () => {
 });
 describe('getSessionsOrderedByDate', () => {
     test('works with no sessions', () => {
-        expect(new SessionsFormatter([], []).getSessionsOrderedByDate(1))
+        const sessionsTypes = [
+            new SessionType(1, 'pompe', 'rep', '', ''),
+        ];
+        expect(new SessionsFormatter([], sessionsTypes).getSessionsOrderedByDate(1))
             .toStrictEqual([]);
     });
     test('works with no sessions of the asked session type', () => {
@@ -45,35 +48,42 @@ describe('getSessionsOrderedByDate', () => {
             new Session(1,3,2, new Date()),
             new Session(1,0,2, new Date()),
         ];
-        expect(new SessionsFormatter(sessions, []).getSessionsOrderedByDate(4))
+        const sessionsTypes = [
+            new SessionType(4, 'pompe', 'rep', '', ''),
+        ];
+        expect(new SessionsFormatter(sessions, sessionsTypes).getSessionsOrderedByDate(4))
             .toStrictEqual([]);
     });
     test('works with session of the asked session type', () => {
-        const expectedSessions = [
-            new Session(1,1,2, new Date())
-        ];
         const sessions = [
-                ...expectedSessions,
+            new Session(1,1,2, new Date(2000,1,1)),
             new Session(1,3,2, new Date()),
             new Session(1,0,2, new Date()),
         ];
-        expect(new SessionsFormatter(sessions, []).getSessionsOrderedByDate(1))
-            .toStrictEqual(expectedSessions);
+        const sessionsTypes = [
+            new SessionType(1, 'pompe', 'rep', '', ''),
+        ];
+        expect(new SessionsFormatter(sessions, sessionsTypes).getSessionsOrderedByDate(1))
+            .toStrictEqual([{date: new Date(2000,1,1).toLocaleDateString(), Repetition: 2}]);
     });
     test('works with sessions of the asked session type ordered by date', () => {
-        const expectedSessions = [
-            new Session(1,1,2, new Date(2019,1,1)),
-            new Session(1,1,2, new Date(2020,1,1)),
-            new Session(1,1,2, new Date(2020,2,1)),
-        ];
         const sessions = [
-            expectedSessions[2],
-            expectedSessions[0],
-            expectedSessions[1],
+            new Session(1,1,2, new Date(2020,1,1)),
+            new Session(1,1,2, new Date(2019,1,1)),
+            new Session(1,1,2, new Date(2020,2,1)),
             new Session(1,3,2, new Date()),
             new Session(1,0,2, new Date()),
         ];
-        expect(new SessionsFormatter(sessions, []).getSessionsOrderedByDate(1)).toStrictEqual(expectedSessions);
+        const sessionsTypes = [
+            new SessionType(1, 'pompe', 'rep', '', ''),
+        ];
+        expect(new SessionsFormatter(sessions, sessionsTypes).getSessionsOrderedByDate(1)).toStrictEqual(
+            [
+                {date: new Date(2019,1,1).toLocaleDateString(), Repetition: 2},
+                {date: new Date(2020,1,1).toLocaleDateString(), Repetition: 2},
+                {date: new Date(2020,2,1).toLocaleDateString(), Repetition: 2},
+            ]
+        );
     });
 });
 describe('getSummedSessionsValuesByExercices', () => {
