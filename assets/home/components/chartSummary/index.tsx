@@ -5,6 +5,7 @@ import SessionsFormatter from "../entities/SessionsFormatter";
 import SessionType from "../../../settings/sessions/entities/Session";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 
 const ChartSummary:React.FunctionComponent<{
     sessions?: Session[],
@@ -26,6 +27,7 @@ const ChartSummary:React.FunctionComponent<{
             >
             {usedSessionsTypes.map(sessionType => {
                 return <Grid key={sessionType.id} item xs={12} sm md>
+                    <Typography align={'center'} variant={'h5'} sx={{paddingBottom:'10px'}}>{sessionType.exercice}</Typography>
                     <ResponsiveContainer height={300}>
                         <BarChart data={sessionsFormatter.getSessionsOrderedByDate(sessionType.id)}>
                             <XAxis dataKey="date"/>
